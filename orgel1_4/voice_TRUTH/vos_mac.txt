@@ -1,0 +1,1 @@
+		vos_mac	0x000000,0x3d9f28,16000	;TRUTH.wav
