@@ -1,0 +1,36 @@
+【前振り】
+
+<a href="http://tutujith.blog.fc2.com/blog-entry-826.html" target="_blank" title="ＲＦＩＤの２線ＳＰＩ接続が上手く行った"><span style="color:#FF0000"><strong>ＲＦＩＤの２線ＳＰＩ接続が上手く行った</strong></span></a>　ので、ＳＴＭ３２電子オルゴールＶｅｒ１＿４に機能を反映した。
+
+
+【設計】
+
+①やり方は　<a href="http://tutujith.blog.fc2.com/blog-entry-826.html" target="_blank" title="ＲＦＩＤの２線ＳＰＩ接続"><span style="color:#FF0000"><strong>ＲＦＩＤの２線ＳＰＩ接続</strong></span></a>　の記事を参照。
+
+②ＳＴＭ３２電子オルゴールで特に考慮したことは
+
+・固有処理のコールバック周期でＲＦＩＤリーダライタへアクセスするので、タグ検知のレスポンスを早くするために、ｺｰバック周期を１０ｍｓにしている。これは従前どおりの考えだ。
+
+・２線ＳＰＩでは、コマンド実行の都度、ＮＳＳのネゲート待ち２０ｕｓが発生するので、ＯＵＴバッファを５０に大きくした。これより小さくするとタグを検知したときにオルゴール演奏でアンダーランが生じた。
+
+
+【評価】
+
+①サンプルプロジェクトの動作要件
+
+・丸形タグを翳すと、そのタグの色を喋って、対応する曲を演奏する。
+
+　赤は「赤とんぼ」
+　青は「青い目のお人形」
+　黄は「汽（黄）車ポッポ」
+
+・白カードを翳すと、オルゴール演奏を停止する。
+
+②実際の動作
+<iframe src="https://video.fc2.com//embed/player/20241106H6YD5S05/" width="560" height="315" frameborder="0" allowfullscreen="true"></iframe>
+
+【ダウンロード】
+
+プロジェクト一式は　<a href="https://drive.google.com/file/d/1_EQOB8y7ZNF8W41dpKjoThnxdAZjZsz2/view?usp=sharing" target="_blank" title="ここから"><span style="color:#FF0000"><strong>ここから</strong></span></a>　ダウンロードできる。
+
+プロジェクトは　orgel_RFID_F4P6.uvproj

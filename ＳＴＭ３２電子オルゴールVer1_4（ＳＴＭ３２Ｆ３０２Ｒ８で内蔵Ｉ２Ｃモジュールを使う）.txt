@@ -1,0 +1,420 @@
+ＳＴＭ３２Ｆ３０２Ｒ８Ｔ６が搭載されたＮｕｃｌｅｏボード
+<a href="http://tutujith.blog.fc2.com/img/20260310142801cbc.jpg/" target="_blank"><img src="https://blog-imgs-185.fc2.com/t/u/t/tutujith/20260310142801cbc.jpg" alt="ＳＴＭ３２事始め（ＮｕｃｌｅｏＦ３０２Ｒ８でＭＣＯ）６４ボード" border="0" width="512" height="574" /></a>
+
+先日はＳＴＭ３２電子オルゴールで <a href="http://tutujith.blog.fc2.com/blog-entry-1023.html" target="_blank" title="ＳＴＭ３２Ｆ３０２Ｒ８をサポートした"><span style="color:#FF0000"><strong>ＳＴＭ３２Ｆ３０２Ｒ８をサポートした</strong></span></a> のだが、Ｉ２Ｃがソフト実装だった。
+今回は内蔵Ｉ２Ｃモジュールを使用可能とした。
+
+
+【設計】
+
+①内蔵Ｉ２Ｃモジュール用のコード
+
+・各種マイコン、その中でも型番によってＩ２Ｃの論理仕様はそれぞれにクセがある。僕の電子オルゴールもクセの塊みたいなもので、クセがあることを批判はできない。寧ろ、改善を重ねる中でそれぞれのバージョンでの工夫がクセとなって表れている訳で、進化の経緯と捉えるのが宜しいと思う。
+
+・ＳＴＭ３２では、Ｆ０３０、Ｆ１０３、Ｆ３０２で全く異なるので、それぞれにコードを書き分ける必要がある。しかし、リファレンスを熟読してコードを書き、実機動作確認を繰り返すのは疲れる。
+
+・それで、今回のＦ３０２のサポートではＣｈａｔＧＰＴにコードを書いて貰うことにした。と言うことで、僕の工夫は無い。
+
+②Ｉ２Ｃメモリから読み込むコード
+
+・「<span style="color:#0000FF"><strong>ＳＴＭ３２Ｆ３０２Ｒ８のI２Cマスタ受信で無限受信中に任意タイミングで中断する、レジスタ打ちの完全コード</strong></span>」　をＣｈａｔＧＰＴに送る。
+
+・回答は下記の通り。
+
+＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋ここから
+
+STM32F302R8のI²C（新I2Cペリフェラル）で、**マスタ受信を“ほぼ無限に継続しつつ、任意タイミングでSTOPして中断する”**レジスタ直叩きコードです。
+
+ポイントは
+👉 AUTOENDを使わず ＋ RELOADを使って255バイト単位で延長
+👉 任意タイミングで STOP を発行
+
+🔧 前提
+
+I2C1使用
+
+PB6=SCL, PB7=SDA
+
+受信スレーブ：例 0x50
+
+ポーリング方式（割り込みなし）
+
+📁 完全コード（main.c）
+#include "stm32f3xx.h"
+
+#define SLAVE_ADDR (0x50 << 1)
+
+volatile uint8_t stop_request = 0;
+
+void delay(volatile uint32_t t)
+{
+　while(t--);
+}
+
+//--------------------------------
+// I2C初期化
+//--------------------------------
+void I2C1_Init(void)
+{
+　RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+　RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;
+
+　// PB6, PB7 AF4
+　GPIOB->MODER &= ~( (3<<(6*2)) | (3<<(7*2)) );
+　GPIOB->MODER |=　( (2<<(6*2)) | (2<<(7*2)) );
+
+　GPIOB->AFR[0] &= ~( (0xF<<(6*4)) | (0xF<<(7*4)) );
+　GPIOB->AFR[0] |=　( (4<<(6*4)) | (4<<(7*4)) );
+
+　GPIOB->OTYPER |= (1<<6) | (1<<7);
+
+　GPIOB->PUPDR &= ~( (3<<(6*2)) | (3<<(7*2)) );
+　GPIOB->PUPDR |=　( (1<<(6*2)) | (1<<(7*2)) );
+
+　// リセット
+　RCC->APB1RSTR |=　RCC_APB1RSTR_I2C1RST;
+　RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C1RST;
+
+　// 無効化
+　I2C1->CR1 &= ~I2C_CR1_PE;
+
+　// 8MHz → 100kHz
+　I2C1->TIMINGR = 0x2000090E;
+
+　// 有効化
+　I2C1->CR1 |= I2C_CR1_PE;
+}
+
+//--------------------------------
+// 無限受信開始
+//--------------------------------
+void I2C1_Start_InfiniteRead(uint8_t addr)
+{
+　// CR2設定
+　I2C1->CR2 = 0;
+　I2C1->CR2 |= (addr & 0xFE);　 // アドレス
+　I2C1->CR2 |= (255 << 16);　　 // 最大チャンク
+　I2C1->CR2 |= I2C_CR2_RELOAD;　// リロードモード
+　I2C1->CR2 |= I2C_CR2_RD_WRN;　// Read
+
+　// START
+　I2C1->CR2 |= I2C_CR2_START;
+}
+
+//--------------------------------
+// 無限受信処理（ポーリング）
+//--------------------------------
+void I2C1_InfiniteRead_Loop(void)
+{
+　uint8_t data;
+
+　while(1)
+　{
+　　// ① 任意停止要求
+　　if(stop_request)
+　　{
+　　　// STOP発行
+　　　I2C1->CR2 |= I2C_CR2_STOP;
+
+　　　// STOP待ち
+　　　while(!(I2C1->ISR & I2C_ISR_STOPF));
+
+　　　// フラグクリア
+　　　I2C1->ICR |= I2C_ICR_STOPCF;
+
+　　　break;
+　　}
+
+　　// ② 受信データ
+　　if(I2C1->ISR & I2C_ISR_RXNE)
+　　{
+　　　data = I2C1->RXDR;
+
+　　　// ↓ここに処理を書く（リングバッファなど）
+　　}
+
+　　// ③ 255バイト受信完了 → 次チャンク
+　　if(I2C1->ISR & I2C_ISR_TCR)
+　　{
+　　　I2C1->CR2 &= ~(0xFF << 16);
+　　　I2C1->CR2 |= (255 << 16);　 // 再設定
+　　}
+　}
+}
+
+//--------------------------------
+// main
+//--------------------------------
+int main(void)
+{
+　I2C1_Init();
+
+　while(1)
+　{
+　　stop_request = 0;
+
+　　I2C1_Start_InfiniteRead(SLAVE_ADDR);
+
+　　// 別条件で停止する想定
+　　// 例：一定時間後停止
+　　for(int i=0; i<1000000; i++)
+　　{
+　　　if(i == 800000)
+　　　　stop_request = 1;
+　　}
+
+　　I2C1_InfiniteRead_Loop();
+
+　　delay(1000000);
+　}
+}
+🧠 重要な仕組み
+■ なぜ「無限受信」ができる？
+
+STM32のI2Cは最大255バイト制限があるため：
+
+RELOAD=1 → 255バイトごとにTCR発生
+
+TCR時にNBYTES再設定 → 擬似無限
+
+■ 任意停止の本質
+I2C1->CR2 |= I2C_CR2_STOP;
+
+これをいつでも叩けるのがポイント
+
+👉 ハードが安全にSTOP生成
+
+■ フラグの役割
+
+RXNE：受信データあり
+
+TCR：次チャンク要求
+
+STOPF：STOP完了
+
+⚠️ 注意点（かなり重要）
+① STOPタイミング
+
+RXNE未処理でSTOPするとデータ欠損あり
+
+👉 実務では：
+
+if(stop_request && !(I2C1->ISR & I2C_ISR_RXNE))
+② スレーブ依存
+
+無限クロック供給OKなデバイスのみ成立
+
+一部センサは内部レジスタ終端あり
+
+③ BUSYスタック対策
+
+異常時：
+
+if(I2C1->ISR & I2C_ISR_BUSY)
+
+→ ソフトリセット必要
+
+🔥 実務レベル改善
+
+DMA受信（CPU負荷激減）
+
+リングバッファ
+
+タイムアウト
+
+エラー処理（NACK/BERR/ARLO）
+
+割り込み化
+
+💡 必要なら
+
+DMA無限受信版（かなり実用）
+
+割り込み＋リングバッファ設計
+
+センサ連続読み（MPU/ADC系）
+
+FreeRTOS対応
+
+まで深掘りできます 👍
+
+＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋ここまで
+
+・上記の通り、凄く丁寧で親切な指南が得られた。
+
+③Ｉ２Ｃメモリへ読み込みアドレスを設定するコード
+
+・「<span style="color:#0000FF"><strong>ＳＴＭ３２Ｆ３０２Ｒ８のI２Cマスタで２バイトを送信する、レジスタ打ちの完全コード</strong></span>」　をＣｈａｔＧＰＴに送る。
+
+・回答は下記の通り。
+
+＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋ここから
+
+STM32F302R8でI²Cマスタ送信（2バイト）を**レジスタ直叩き（LL/HAL不使用）**で行う完全コードを示します。
+I²CはSTM32の「新I2Cペリフェラル（F0/F3系）」仕様です。
+
+🔧 前提
+
+I2C1使用
+
+PB6 = SCL, PB7 = SDA
+
+スレーブアドレス：0x50（例）
+
+送信データ：2バイト
+
+📁 完全コード（main.c）
+#include "stm32f3xx.h"
+
+#define SLAVE_ADDR  (0x50 << 1)  // 7bit左シフト
+
+void delay(volatile uint32_t t)
+{
+　while(t--);
+}
+
+void I2C1_Init(void)
+{
+　// ① GPIOB クロック有効
+　RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+
+　// ② I2C1 クロック有効
+　RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;
+
+　// ③ PB6, PB7 をAFモード
+　GPIOB->MODER &= ~( (3<<(6*2)) | (3<<(7*2)) );
+　GPIOB->MODER |=  ( (2<<(6*2)) | (2<<(7*2)) );
+
+　// ④ AF4(I2C)
+　GPIOB->AFR[0] &= ~( (0xF<<(6*4)) | (0xF<<(7*4)) );
+　GPIOB->AFR[0] |=  ( (4<<(6*4)) | (4<<(7*4)) );
+
+　// ⑤ オープンドレイン
+　GPIOB->OTYPER |= (1<<6) | (1<<7);
+
+　// ⑥ プルアップ
+　GPIOB->PUPDR &= ~( (3<<(6*2)) | (3<<(7*2)) );
+　GPIOB->PUPDR |=  ( (1<<(6*2)) | (1<<(7*2)) );
+
+　// ⑦ I2Cリセット
+　RCC->APB1RSTR |=  RCC_APB1RSTR_I2C1RST;
+　RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C1RST;
+
+　// ⑧ I2C無効化
+　I2C1->CR1 &= ~I2C_CR1_PE;
+
+　// ⑨ タイミング設定（8MHz想定・100kHz）
+　I2C1->TIMINGR = 0x2000090E;
+
+　// ⑩ I2C有効化
+　I2C1->CR1 |= I2C_CR1_PE;
+}
+
+void I2C1_Write2Bytes(uint8_t addr, uint8_t data1, uint8_t data2)
+{
+　// ① 転送設定
+　I2C1->CR2 = 0;
+　I2C1->CR2 |= (addr & 0xFE);　　// スレーブアドレス
+　I2C1->CR2 |= (2 << 16);　　　// 2バイト
+　I2C1->CR2 |= I2C_CR2_AUTOEND;　  // 自動STOP
+
+　// ② START
+　I2C1->CR2 |= I2C_CR2_START;
+
+　// ③ 1バイト目
+　while(!(I2C1->ISR & I2C_ISR_TXIS));
+　I2C1->TXDR = data1;
+
+　// ④ 2バイト目
+　while(!(I2C1->ISR & I2C_ISR_TXIS));
+　I2C1->TXDR = data2;
+
+　// ⑤ STOP待ち
+　while(!(I2C1->ISR & I2C_ISR_STOPF));
+
+　// ⑥ フラグクリア
+　I2C1->ICR |= I2C_ICR_STOPCF;
+}
+
+int main(void)
+{
+　I2C1_Init();
+
+　while(1)
+　{
+　　I2C1_Write2Bytes(SLAVE_ADDR, 0xAA, 0x55);
+　　delay(1000000);
+　}
+}
+⚠️ 重要ポイント
+① アドレス
+
+(0x50 << 1) は7bitアドレス→8bit化
+
+CR2には「R/Wビット無しの形」で入れる
+
+② TIMINGR
+
+クロックで変わるので注意：
+
+8MHz → 0x2000090E（例）
+
+72MHzなら別値必要
+
+👉 正確には
+STM32CubeMXで生成した値を使うのが安全
+
+③ フラグの意味
+
+TXIS：送信レジスタ空
+
+STOPF：STOP検出
+
+④ エラー未処理
+
+簡易版なので未対応：
+
+NACK（I2C_ISR_NACKF）
+
+BUSY stuck
+
+arbitration lost
+
+🔥 実務での改善ポイント
+
+タイムアウト追加（無限ループ防止）
+
+NACK処理
+
+リトライ機構
+
+割り込み or DMA化
+
+💡 必要なら
+
+レジスタリード（レジスタアドレス付き通信）
+
+DMA版（高速）
+
+400kHz高速設定
+
+マルチバイト汎用関数
+
+もすぐ書けます 👍
+
+＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋ここまで
+
+・こちらも、凄く丁寧で親切な指南が得られた。もう、マイコン教室は無用だな。
+
+④ｏｒｇｅｌ．ｃの更新
+
+・ＣｈａｔＧＰＴの指南の通りにｏｒｇｅｌ．ｃを更新した。更新後のコードはダウンロードファイルを参照。
+
+・実機で動作確認したら、正常に動作した。「完全コード」のままでは受信中断でＳＴＯＰが実行されなかったが、「注意点（かなり重要）」で説明されている「① STOPタイミング」の対応を追加して完全にＯＫになった。
+
+・ＣｈａｔＧＰＴの指南は完璧だった。
+
+
+【ダウンロード】
+
+プロジェクト一式は　<a href="https://drive.google.com/file/d/1_EQOB8y7ZNF8W41dpKjoThnxdAZjZsz2/view?usp=sharing" target="_blank" title="ここから"><span style="color:#FF0000"><strong>ここから</strong></span></a>　ダウンロードできる。

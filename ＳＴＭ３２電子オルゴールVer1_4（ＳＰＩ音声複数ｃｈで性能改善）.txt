@@ -1,0 +1,40 @@
+【前振り】
+
+ＳＰＩ音声の複数ｃｈを使うとき、サンプルレートを１６ｋｓｐｓに速くするとアンダーランが生じていたので、これを改善した。
+
+
+【設計】
+
+①ＳＰＩ音声の複数ｃｈでは、ＳＰＩフラッシュからＰＣＭデータを読み込む際にリードコマンドと２４ビットアドレスを転送するため、１データを取得するのに５バイトの転送量になっていた。
+
+②ＰＣＭデータの読み込みをバッファリングして、複数バイトを纏めて読み込むようにする。例えば、８バイトを纏めて読み込むようにすると転送量は１２バイトで済む。初めからそのようにしておけばよかったことなのだが。。。
+
+
+【動作確認】
+
+①３線ＳＰＩ、１６ｋｓｐｓ２ｃｈで実行時のＳＰＩバスの波形
+<a href="http://tutujith.blog.fc2.com/img/20250213144435f3a.png/" target="_blank"><img src="https://blog-imgs-156.fc2.com/t/u/t/tutujith/20250213144435f3a.png" alt="ＳＴＭ３２電子オルゴールVer1_4（ＳＰＩ音声複数ｃｈで性能改善）ＳＰＩ波形１" border="0" width="1010" height="771" /></a>
+・各ｃｈの転送周期は　１／１６ｋｓｐｓ×８＝５００ｕｓ　となっている。
+
+<a href="http://tutujith.blog.fc2.com/img/2025021314443070a.png/" target="_blank"><img src="https://blog-imgs-156.fc2.com/t/u/t/tutujith/2025021314443070a.png" alt="ＳＴＭ３２電子オルゴールVer1_4（ＳＰＩ音声複数ｃｈで性能改善）ＳＰＩ波形２" border="0" width="1010" height="771" /></a>
+・リードコマンドに続いて２４ビットアドレスが送信されて、その後に８バイトのデータが受信ｓれている。
+
+<a href="http://tutujith.blog.fc2.com/img/2025021314443329d.png/" target="_blank"><img src="https://blog-imgs-156.fc2.com/t/u/t/tutujith/2025021314443329d.png" alt="ＳＴＭ３２電子オルゴールVer1_4（ＳＰＩ音声複数ｃｈで性能改善）ＳＰＩ波形３" border="0" width="1010" height="771" /></a>
+
+②タイミングに十分な余裕があり、ＣＰＵの占有率は５０％以下である。
+
+③４ｃｈでもアンダーランせずに動作可能と思われる。
+
+
+【ダウンロード】
+
+プロジェクト一式は　<a href="https://drive.google.com/file/d/1_EQOB8y7ZNF8W41dpKjoThnxdAZjZsz2/view?usp=sharing" target="_blank" title="ここから"><span style="color:#FF0000"><strong>ここから</strong></span></a>　ダウンロードできる。
+
+更新ファイルは下記の２つ。
+
+orgel.h
+orgel.c
+
+改善機能を実装するには　cnf.bat　に下記の１行を追加する。
+
+call make_cnf.bat	SPI_BUF_N	8	//SPIﾊﾞｯﾌｧｻｲｽﾞ

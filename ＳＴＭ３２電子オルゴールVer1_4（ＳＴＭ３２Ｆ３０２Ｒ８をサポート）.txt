@@ -1,0 +1,32 @@
+ＳＴＭ３２Ｆ３０２Ｒ８Ｔ６が搭載されたＮｕｃｌｅｏボード
+<a href="http://tutujith.blog.fc2.com/img/20260310142801cbc.jpg/" target="_blank"><img src="https://blog-imgs-200.fc2.com/t/u/t/tutujith/20260310142801cbc.jpg" alt="ＳＴＭ３２事始め（ＮｕｃｌｅｏＦ３０２Ｒ８でＭＣＯ）６４ボード" border="0" width="512" height="574" /></a>
+
+先日は、<a href="http://tutujith.blog.fc2.com/blog-entry-1021.html" target="_blank" title="ＳＴＭ３２Ｆ３０２Ｒ８の開発環境"><span style="color:#FF0000"><strong>ＳＴＭ３２Ｆ３０２Ｒ８の開発環境</strong></span></a> の確認を行った。
+今回は、ＳＴＭ３２電子オルゴールをＮｕｃｌｅｏＦ３０２Ｒ８に搭載した。
+
+
+【設計】
+
+①リファレンスを読み比べると、ＳＴＭ３２Ｆ３０２はＳＴＭ３２Ｆ０３０に近しい。
+
+・ＰＷＭ（ＴＩＭｘ）、ＳＰＩは殆ど同じ。それで、Ｆ０３０のコードをベースに違いのある部分を改変した。
+
+・Ｉ２Ｃは違いが大きいので、取り敢えずソフト実装で逃げた。内蔵Ｉ２Ｃモジュールへの対応は後日やる。
+
+・ＡＤＣ関連はコモンレジスタが有ったりするので、リファレンスとシステムヘッダをよく見てコードを書いた。
+
+・ＷＵＴはＦ０３０と同じく、ＲＴＣのアラームＡを使う。但し、ＥＸＴＩはイベントを使うので、ＩＳＲは用意しなくてよい。
+
+②ＣＶＤの動作でＡＤＣ値がバラ付くことがあったので、評価の回ごとにＡＤＣの有効／無効を行うようにした。
+
+③オルゴールエンジン部のコードの曲演奏と音声再生の部分は機種の依存性が無いので、コードの変更は不要だった。
+
+
+【ダウンロード】
+
+プロジェクト一式は　<a href="https://drive.google.com/file/d/1_EQOB8y7ZNF8W41dpKjoThnxdAZjZsz2/view?usp=sharing" target="_blank" title="ここから"><span style="color:#FF0000"><strong>ここから</strong></span></a>　ダウンロードできる。
+
+
+【ボードへの書き込み】
+
+ＳＴＭ３２Ｆ３０２Ｒ８Ｔ６が搭載されたＮｕｃｌｅｏボードへの書き込みは　<a href="https://tutujith.blog.fc2.com/blog-entry-1021.html" target="_blank" title="ここを"><span style="color:#FF0000"><strong>ここを</strong></span></a>　参照。

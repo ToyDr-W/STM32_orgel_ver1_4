@@ -1,0 +1,23 @@
+①先日は　<a href="http://tutujith.blog.fc2.com/blog-entry-978.html" target="_blank" title="ＰＵＹＡ３２電子オルゴールで「キーボードおもちゃへの対応機能」"><span style="color:#FF0000"><strong>ＰＵＹＡ３２電子オルゴールで「キーボードおもちゃへの対応機能」</strong></span></a>　をサポートした。今回はＳＴＭ３２電子オルゴールでもサポートした。
+
+②開発内容はＰＵＹＡ３２電子オルゴールでの対応と同じ。
+
+③開発プロジェクトは　<a href="https://drive.google.com/file/d/1_EQOB8y7ZNF8W41dpKjoThnxdAZjZsz2/view?usp=sharing" target="_blank" title="ここから"><span style="color:#FF0000"><strong>ここから</strong></span></a>　ダウンロードできる。
+
+ＰＵＹＡ３２のデバイス毎にプロジェクトがあり、プロジェクトディレクトリは下記のとおり。
+
+Ｆ０３０Ｆ４は　ｏｒｇｅｌ＿ＫＢ＿Ｆ０３０Ｆ４
+
+Ｆ０３０Ｃ６は　ｏｒｇｅｌ＿ＫＢ＿Ｆ０３０Ｃ６
+
+Ｆ０３０Ｃ８は　ｏｒｇｅｌ＿ＫＢ＿Ｆ０３０Ｃ８
+
+Ｆ０３０ＣＣは　ｏｒｇｅｌ＿ＫＢ＿Ｆ０３０ＣＣ
+
+
+
+
+
+
+
+

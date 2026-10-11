@@ -1,0 +1,11 @@
+先日は、ＰＵＹＡ電子オルゴールで効果音発声とサンプルレート変更の機能追加を行った。それを、ＳＴＭ３２電子オルゴールにも移植した。
+
+設計と実装はＰＵＹＡ電子オルゴールと同じなので、詳細は下記を参照。
+<a href="http://tutujith.blog.fc2.com/blog-entry-987.html" target="_blank" title="ＰＵＹＡ電子オルゴールVer1_4（効果音発声）"><span style="color:#FF0000"><strong>ＰＵＹＡ電子オルゴールVer1_4（効果音発声）</strong></span></a>
+<a href="http://tutujith.blog.fc2.com/blog-entry-989.html" target="_blank" title="ＰＵＹＡ電子オルゴールVer1_4（効果音サンプルレート変更）"><span style="color:#FF0000"><strong>ＰＵＹＡ電子オルゴールVer1_4（効果音サンプルレート変更）</strong></span></a>
+
+設計資料とプロジェクト一式は　<a href="https://drive.google.com/file/d/1_EQOB8y7ZNF8W41dpKjoThnxdAZjZsz2/view?usp=drive_link" target="_blank" title="ここから"><span style="color:#FF0000"><strong>ここから</strong></span></a>　ダウンロードできる。
+
+サンプルプロジェクトのディレクトリは
+効果音発声　orgel_SW_F030F4-DRIVE
+効果音サンプルレート変更　orgel_SW_F030F4-PEDAL

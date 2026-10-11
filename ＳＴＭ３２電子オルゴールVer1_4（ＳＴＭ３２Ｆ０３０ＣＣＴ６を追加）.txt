@@ -1,0 +1,15 @@
+<a href="http://tutujith.blog.fc2.com/blog-entry-899.html" target="_blank" title="ＳＴＭ３２事始めで紹介したＳＴＭ３２Ｆ０３０ＣＣＴ６"><span style="color:#FF0000"><strong>ＳＴＭ３２事始めで紹介したＳＴＭ３２Ｆ０３０ＣＣＴ６</strong></span></a>用のＳＴＭ３２電子オルゴールのプロジェクトを追加した。
+
+機能は今までのデバイスと変わらない。フラッシュが２５６ｋバイトもあるので、音声再生では３０秒程度まで可能になる。
+
+待機時の消費電流は、機械ＳＷのみのとき５ｕＡ、ＣＶＤタッチＳＷを１個設置したときはち３４ｕＡだった。
+稼働時は１７ｍＡで、消費電流はやや多めだ。
+
+
+【ダウンロード】
+
+プロジェクト一式は　<a href="https://drive.google.com/file/d/1_EQOB8y7ZNF8W41dpKjoThnxdAZjZsz2/view?usp=sharing" target="_blank" title="ここから"><span style="color:#FF0000"><strong>ここから</strong></span></a>　ダウンロードできる。
+
+ＳＴＭ３２Ｆ０３０Ｃ８Ｔ６のプロジェクトも作ってあるが、実機が無いので動作確認はしていない。誰かやっていただけると有難い。
+
+⇒その後、<a href="http://tutujith.blog.fc2.com/blog-entry-933.html" target="_blank" title="仙台イズミのドクターが基板を起こして動作確認してくれた"><span style="color:#FF0000"><strong>仙台イズミのドクターが基板を起こして動作確認してくれた</strong></span></a>。謝謝。

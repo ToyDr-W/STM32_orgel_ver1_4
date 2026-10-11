@@ -1,0 +1,7 @@
+ＳＴＭ３２電子オルゴールＶｅｒ１＿４でＲＦＩＤをサポートした。
+
+ＳＴＭ３２電子オルゴールは　<a href="http://tutujith.blog.fc2.com/blog-entry-817.html" target="_blank" title="ポート節約の改善でＶｅｒ１＿４にバージョンアップした"><span style="color:#FF0000"><strong>ポート節約の改善でＶｅｒ１＿４にバージョンアップした</strong></span></a>　のだが、ポート節約に関わる改変はＲＦＩＤの機能に影響しない。そのため、コードはＶｅｒ１＿３のままで、Ｖｅｒ１＿４でＲＦＩＤの動作確認ができたと言うことだ。
+
+<iframe src="https://video.fc2.com//embed/player/20241025wMwYWSaq/" width="560" height="315" frameborder="0" allowfullscreen="true"></iframe>
+
+プロジェクト一式は　<a href="https://drive.google.com/file/d/1_EQOB8y7ZNF8W41dpKjoThnxdAZjZsz2/view?usp=sharing" target="_blank" title="ここから"><span style="color:#FF0000"><strong>ここから</strong></span></a>　ダウンロードできる。

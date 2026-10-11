@@ -1,0 +1,16 @@
+懇意にしていただている（と思っている）おもちゃドクターがＳＴＭ３２Ｆ０３０Ｃ８Ｔ６の完成基板を作ってくれた。多謝。
+
+<a href="http://tutujith.blog.fc2.com/img/202506181413293b4.jpg/" target="_blank"><img src="https://blog-imgs-163.fc2.com/t/u/t/tutujith/202506181413293b4.jpg" alt="ＳＴＭ３２電子応ゴール（ＳＴＭ３２Ｆ０３０Ｃ８Ｔ６完成基板）１" border="0" width="600" height="450" /></a>
+
+<a href="http://tutujith.blog.fc2.com/img/20250618141331178.jpg/" target="_blank"><img src="https://blog-imgs-163.fc2.com/t/u/t/tutujith/20250618141331178.jpg" alt="ＳＴＭ３２電子応ゴール（ＳＴＭ３２Ｆ０３０Ｃ８Ｔ６完成基板）２" border="0" width="600" height="450" /></a>
+
+・マイコンは　ＳＴＭ３２Ｆ０３０Ｃ８Ｔ６
+・ＳＰＩフラッシュは　Ｗ２５Ｑ６４ＦＶ
+・ブリッジは　ＭＸ６１２
+・青いリード線はタッチセンスのパッド
+
+<a href="http://tutujith.blog.fc2.com/img/20250618141331e8f.jpg/" target="_blank"><img src="https://blog-imgs-163.fc2.com/t/u/t/tutujith/20250618141331e8f.jpg" alt="ＳＴＭ３２電子応ゴール（ＳＴＭ３２Ｆ０３０Ｃ８Ｔ６完成基板）３" border="0" width="600" height="450" /></a>
+
+今時は基板屋さんに発注するのがフツウだが、これは自前エッチングだ。ＣＰＵ基板はピッチ変換基板だが、標準ピッチのピン間に１本通している。手作りで凄い工作精度だと思う。ホントに趣味の世界だな。
+
+<iframe src="https://video.fc2.com//embed/player/20250618eztx0USW/" width="560" height="315" frameborder="0" allowfullscreen="true"></iframe>
