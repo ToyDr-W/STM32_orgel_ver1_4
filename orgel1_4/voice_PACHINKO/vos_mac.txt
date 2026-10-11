@@ -1,0 +1,8 @@
+	vos_mac(0x000000,0x00dc10,8000)	//1:open.wav
+	vos_mac(0x00dc10,0x001830,8000)	//2:start.wav
+	vos_mac(0x00f440,0x03fd20,8000)	//3:utidasi.wav
+	vos_mac(0x04f160,0x00d610,8000)	//4:hazure.wav
+	vos_mac(0x05c770,0x01e690,8000)	//5:atari.wav
+	vos_mac(0x07ae00,0x03ffd0,8000)	//6:fever.wav
+	vos_mac(0x0badd0,0x010610,8000)	//7:seikou.wav
+	vos_mac(0x0cb3e0,0x013eeb,8000)	//8:zannnen.wav

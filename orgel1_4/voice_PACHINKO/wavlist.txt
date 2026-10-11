@@ -1,0 +1,8 @@
+open.wav
+start.wav
+utidasi.wav
+hazure.wav
+atari.wav
+fever.wav
+seikou.wav
+zannnen.wav
