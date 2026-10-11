@@ -1,0 +1,4 @@
+./objects/main.o: main.c ..\Include\stm32f0xx.h ..\Include\stm32f030x6.h \
+  ..\Include\core_cm0.h ..\Include\system_stm32f0xx.h orgel_cnf.h \
+  ..\orgel.h ..\dev_F030.c ..\common.c ..\orgel.c ..\dev_PWM_F030F4.c \
+  ..\apl_RFID.c ..\func_RFID.c
