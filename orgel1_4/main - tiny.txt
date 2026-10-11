@@ -1,0 +1,539 @@
+#define	OSCCAL_VALUE 0x53	//ﾀｰｹﾞｯﾄのOSCCAL値(@8MHz)
+
+//#define	SHDBG		//ﾃﾞﾊﾞｸﾞ情報を取得するときに宣言する
+//#define	W25_STUB	//W25ｽﾀﾌﾞを利用するときに宣言する
+//#define	ADC_STUB	//ADCｽﾀﾌﾞを利用するときに宣言する
+
+/*
+作成日：2018年11月17日
+作成者：大泉茂幸
+
+【ｱﾌﾟﾘｹｰｼｮﾝ】
+・ﾐﾐｸﾘｰﾍﾟｯﾄ(及び類似品)の制御基板をAVRで換装する｡
+・前のﾊﾞｰｼﾞｮﾝとの相違は音声ﾒﾓﾘに24FC256よりも廉価なW25Q16を採用したこと｡
+・W25Q16の動作電圧は2.7～3.6Vであることに留意すること｡
+
+【ﾀｰｹﾞｯﾄﾃﾞﾊﾞｲｽ】
+ATtiny13A､W25Q16
+
+【ﾋｭｰｽﾞ設定】
+・内蔵ｵｼﾚｰﾀの8分周無しを設定すること｡
+・RESETﾋﾟﾝ機能は無効とすること｡
+・BOD検出ﾚﾍﾞﾙはBODLEVEL1,0=10に設定すること｡
+
+【ｸﾛｯｸ設定】
+・内臓ｵｼﾚｰﾀを8MHzに校正し､校正値を｢OSCCAL_VALUE｣で宣言しておくこと｡
+
+【ﾎﾟｰﾄ割当て】
+・PB5はISP時に高電圧が印加されるので､周辺回路への影響がない音声入力に
+割当てる｡
+PB0:PWM出力(OC0A､正論理)
+PB1:MOSI_BIT
+PB2:SCK_BIT(内部ﾌﾟﾙｱｯﾌﾟ)
+PB3:SS_BIT(内部ﾌﾟﾙｱｯﾌﾟ)
+PB4:MISO_BIT(内部ﾌﾟﾙｱｯﾌﾟ)
+PB5:音声入力(ADC0)
+
+【状態の遷移】
+・電源ｵﾝで､雑音をADCして､そのADC結果で最初のﾒﾓﾘ割当てｱﾄﾞﾚｽをﾗﾝﾀﾞﾏｲｽﾞする｡
+・割当てたﾌﾞﾛｯｸが未使用でなければﾌﾞﾛｯｸ消去しておく｡
+・音声入力を待つ｡
+・音声入力があると録音を開始する｡
+・音声が途切れたとき､若しくはﾒﾓﾘが満杯になったら録音停止し､再生を開始する｡
+・再生を終了すると､次のﾌﾞﾛｯｸを割当てて､未使用でなければﾌﾞﾛｯｸ消去しておく｡
+・一定時間待って､音声入力待ちに戻る｡
+
+【ﾒﾓﾘの利用形態】
+・W25Q16の2Mﾊﾞｲﾄを64kﾊﾞｲﾄﾌﾞﾛｯｸで分割使用し､1回の録音再生では1個のﾌﾞﾛｯｸを
+利用する｡
+・1回の録音再生で最大16秒間の音声を格納する｡
+・録音再生毎にﾌﾞﾛｯｸをﾗｳﾝﾄﾞﾛﾋﾞﾝに使用することでﾒﾓﾘ劣化を緩和する｡
+・消去済みのｾﾙと識別するため､音声ﾃﾞｰﾀの最大値は0xfeに規制する｡
+
+【ﾎﾞｲｽﾁｪﾝｼﾞ】
+・4kspsで録音し､8kspsで再生することでﾎﾞｲｽﾁｪﾝｼﾞする｡
+・再生は短時間(数10ms)毎に2回繰返すことで､喋る速度は録音時と同じにする｡
+
+【音声有無の判定】
+・音声の有無はADC結果を特定の閾値と比較して判定する｡
+・1ｻﾝﾌﾟﾙの閾値超えで音声有りとし､一定時間の音声有りを検出しなかったら
+音声無しとする｡
+
+【ﾀｲﾐﾝｸﾞ】
+・録音時はPWM周期を256us(4ksps相当)とし､ﾀｲﾏｰ割込み毎にADCする｡
+・再生時はPWM周期を32us(8ksps､4倍ｵｰﾊﾞｻﾝﾌﾟﾘﾝｸﾞ相当)とし､ﾀｲﾏｰ割込みの4回毎
+(128us)にPWMﾃﾞｭｰﾃｨ値を更新する｡
+
+【処理分担】
+・ADCとPWMﾃﾞｭｰﾃｨ値更新は割込み処理で実行する｡
+・SPIﾒﾓﾘのｱｸｾｽと全体的な制御はﾀｽｸ処理で実行する｡
+・ﾀｽｸ処理と割込み処理間はﾘﾝｸﾞﾊﾞｯﾌｧを介してﾃﾞｰﾀ交換する｡
+
+【PWMの構成】
+・ﾃﾞｭｰﾃｨ0を可能とするため､8ﾋﾞｯﾄ高速PWMﾓｰﾄﾞで反転出力としﾃﾞｭｰﾃｨ値を1の補数で
+設定する｡
+
+【ﾘﾝｸﾞﾊﾞｯﾌｧの扱い】
+・readﾎﾟｲﾝﾀとwriteﾎﾟｲﾝﾀが等しいときはﾃﾞｰﾀ無し｡
+・writeﾎﾟｲﾝﾀを進めてみてreadﾎﾟｲﾝﾀに等しくなるときは空き無し｡
+・割込み処理ではﾊﾞｯﾌｧ空きを確認せず､ﾃﾞｰﾀを詰め込む｡つまりｵｰﾊﾞｰﾗﾝを許容する
+ということ｡
+*/
+
+
+#include <avr/io.h>
+#include <avr/pgmspace.h>
+#include <avr/interrupt.h>
+#include <avr/sleep.h>
+
+
+//==============================================
+//ﾎﾟｰﾄ割当て
+//==============================================
+#define	MISO_BIT	4			//MISO_BITﾎﾟｰﾄのﾋﾞｯﾄ位置
+#define	MOSI_BIT	1			//MOSI_BITﾎﾟｰﾄのﾋﾞｯﾄ位置
+#define	SCK_BIT		2			//SCK_BITﾎﾟｰﾄのﾋﾞｯﾄ位置
+#define	SS_BIT		3			//SS_BITﾎﾟｰﾄのﾋﾞｯﾄ位置
+#define	PWM_BIT		0			//PWM出力ﾎﾟｰﾄのﾋﾞｯﾄ位置
+#define	DBG_BIT		0			//ﾃﾞﾊﾞｸﾞ情報出力ﾎﾟｰﾄのﾋﾞｯﾄ位置
+#define	ADC_BIT		5			//ADC入力ﾎﾟｰﾄのﾋﾞｯﾄ位置
+
+
+//==============================================
+//SPIｱｸｾｽﾏｸﾛ
+//==============================================
+#define	SCK_H		PORTB|=(1<<SCK_BIT)	//SCKをH
+#define	SCK_L		PORTB&=~(1<<SCK_BIT)	//SCKをL
+#define	MOSI_H		PORTB|=(1<<MOSI_BIT)	//MOSIをH
+#define	MOSI_L		PORTB&=~(1<<MOSI_BIT)	//MOSIをL
+#define	MISO_IN		PINB&(1<<MISO_BIT)	//MISOを評価
+#define	SS_H		PORTB|=(1<<SS_BIT)	//SSをH
+#define	SS_L		PORTB&=~(1<<SS_BIT)	//SSをL
+
+
+//==============================================
+//ﾒﾓﾘ関連定数
+//==============================================
+#define	MM_PAGE		256			//ﾒﾓﾘのﾍﾟｰｼﾞｻｲｽﾞ[ﾊﾞｲﾄ]
+#define	MM_SIZE		0x10000			//ﾒﾓﾘの割当てｻｲｽﾞ(=ﾌﾞﾛｯｸｻｲｽﾞ)[ﾊﾞｲﾄ]
+#define	MM_FULL		0x200000		//ﾒﾓﾘの全容量[[ﾊﾞｲﾄ]
+
+
+//==============================================
+//W25ｼﾘｰｽﾞ関連定数
+//==============================================
+#define	W25_WriteEnable	0x06			//WriteEnableｺﾏﾝﾄﾞ
+#define	W25_ReadStsReg1	0x05			//ReadStatusRegister1ｺﾏﾝﾄﾞ
+#define	W25_PageProgram	0x02			//PageProgramｺﾏﾝﾄﾞ
+#define	W25_BlockErs64	0xd8			//BlockErase(64kB)ｺﾏﾝﾄﾞ
+#define	W25_ReadData	0x03			//ReadDataｺﾏﾝﾄﾞ
+#define	W25_BusyMsk	0x01			//ｽﾃｰﾀｽﾚｼﾞｽﾀBusyﾋﾞｯﾄﾏｽｸﾊﾟﾀｰﾝ
+
+
+//==============================================
+//ｱﾌﾟﾘｹｰｼｮﾝの定数宣言
+//==============================================
+#define	VOICE_ON	75	//0.22V		//音声有り判定の閾値[Vcc/1024]
+#define	PB_LEN		256	//=32ms@8ksps	//繰返し再生の長さ[ﾊﾞｲﾄ]
+#define	PB_TIMES	2			//繰返し再生の回数
+#define	NO_SENSE	2000	//=0.5秒	//再生終了後の不感時間[250us]
+#define	NO_VOICE	3000	//=0.75秒	//音声無し判定の時間[250us]
+#define	PWM_PS		4			//PWMﾃﾞｭｰﾃｨ更新のﾌﾟﾘｽｹｰﾙ値
+#define	BUF_SIZE	32			//ﾘﾝｸﾞﾊﾞｯﾌｧの大きさ[ﾊﾞｲﾄ]
+
+
+//==============================================
+//大域ﾃﾞｰﾀ
+//==============================================
+static unsigned long mm_addr;			//ﾒﾓﾘｱﾄﾞﾚｽ
+static volatile unsigned char pwm_ps;		//PWMﾃﾞｭｰﾃｨ更新ﾌﾟﾘｽｹｰﾗ
+						//　0=録音､1～4=再生
+static volatile unsigned char buf[BUF_SIZE];	//PCMﾃﾞｰﾀﾊﾞｯﾌｧ
+static volatile unsigned char buf_read;		//PCMﾃﾞｰﾀ読込みﾎﾟｲﾝﾀ
+static volatile unsigned char buf_write;	//PCMﾃﾞｰﾀ書込みﾎﾟｲﾝﾀ
+static volatile unsigned short adc_bias;	//ADC結果評価のﾊﾞｲｽ値
+
+
+#ifdef	SHDBG
+//================================================
+//ﾃﾞﾊﾞｸﾞ情報表示
+//================================================
+
+//1ﾋﾞｯﾄ分の時間待ち(9600bps@8MHz)
+void dbg_wait(void)
+{
+	volatile unsigned char n=92;
+
+	while(n--)
+	{
+	}
+}
+
+
+//1文字を送信
+void dbg_c(
+	unsigned char c)			//表示する文字ﾃﾞｰﾀ
+{
+	unsigned char n;
+
+	PORTB&=~(1<<DBG_BIT);			//ｽﾀｰﾄﾋﾞｯﾄ
+	dbg_wait();
+	for(n=0;n<8;n++)			//8ﾋﾞｯﾄ分繰返す
+	{					//LSBからﾃﾞｰﾀﾋﾞｯﾄを送信する
+		if(c&1) PORTB|=(1<<DBG_BIT);	//ﾋﾞｯﾄ値が1のときはH
+		else PORTB&=~(1<<DBG_BIT);	//ﾋﾞｯﾄ値が0のときはL
+		dbg_wait();			//1ﾋﾞｯﾄ分の待ち
+		c>>=1;				//次のﾋﾞｯﾄに進める
+	}
+	PORTB|=(1<<DBG_BIT);			//ｽﾄｯﾌﾟﾋﾞｯﾄ
+	dbg_wait();				//3ﾋﾞｯﾄ分の待ち
+	dbg_wait();
+	dbg_wait();
+}
+
+
+//16進文字で1ﾊﾞｲﾄを送信
+void dbg_b(
+	unsigned char b)			//表示するﾊﾞｲﾄﾃﾞｰﾀ
+{
+	static const unsigned char hex_tbl[] PROGMEM
+	={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
+	dbg_c(pgm_read_byte(hex_tbl+(b>>4)));
+	dbg_c(pgm_read_byte(hex_tbl+(b&0x0f)));
+}
+
+
+//ﾏｸﾛ定義
+#define	DBG_C(c) dbg_c(c)
+#define	DBG_B(b) dbg_b(b)
+
+#else
+#define	DBG_C(c)
+#define	DBG_B(c)
+#endif
+
+
+//==============================================
+//SPIで1ﾊﾞｲﾄを送受信する
+//==============================================
+unsigned char spi_trans(			//受信したﾃﾞｰﾀを返す
+	unsigned char data)			//送信するﾃﾞｰﾀ
+{
+	unsigned char n; 
+
+	for(n=0;n<8;n++)			//8ﾋﾞｯﾄ分繰返す
+	{
+		if(data&0x80) MOSI_H;		//MSBからMOSIに
+		else MOSI_L;			//　反映する
+		data<<=1;			//ﾃﾞｰﾀを左ｼﾌﾄしておく
+		SCK_H;				//SCKをH
+		asm("NOP");
+		if(MISO_IN) data|=1;		//MISOをﾃﾞｰﾀに反映する
+		SCK_L;				//SCKをL
+	}
+	return(data);				//受信ﾃﾞｰﾀを返す
+}
+
+
+//==============================================
+//ｱﾄﾞﾚｽを設定する
+//==============================================
+void set_addr(void)
+{
+	spi_trans(mm_addr>>16);			//ｱﾄﾞﾚｽ(MSB)
+	spi_trans(mm_addr>>8);			//ｱﾄﾞﾚｽ
+	spi_trans(0);				//ｱﾄﾞﾚｽ(LSB)
+}
+
+
+//==============================================
+//読込みｱﾄﾞﾚｽを設定する
+//==============================================
+void read_addr(void)
+{
+	SS_L;					//ｾﾚｸﾄ
+	spi_trans(W25_ReadData);		//ﾃﾞｰﾀ読込み
+	set_addr();				//ｱﾄﾞﾚｽ設定
+}
+
+
+//==============================================
+//書込み許可を設定する
+//==============================================
+void write_enable(void)
+{
+	SS_L;					//ｾﾚｸﾄ
+	spi_trans(W25_WriteEnable);		//書込み許可
+	SS_H;					//ﾃﾞｨｾﾚｸﾄ
+	asm("NOP");
+	SS_L;					//ｾﾚｸﾄ
+}
+
+
+//==============================================
+//書込みｱﾄﾞﾚｽを設定する
+//==============================================
+void write_addr(void)
+{
+	write_enable();				//書込み許可
+	spi_trans(W25_PageProgram);		//ﾃﾞｰﾀ書込み設定
+	set_addr();				//ｱﾄﾞﾚｽ設定
+}
+
+
+//==============================================
+//実行完了を待つ
+//==============================================
+void wait_done(void)
+{
+	SS_H;					//ﾃﾞｨｾﾚｸﾄ(実行開始)
+	asm("NOP");
+	SS_L;					//ｾﾚｸﾄ
+	for(;;)					//実行完了まで繰返す
+	{
+		spi_trans(W25_ReadStsReg1);	//ｽﾃｰﾀｽﾚｼﾞｽﾀ1を読む
+		if(!(spi_trans(0)&W25_BusyMsk)) break;
+						//Busyﾋﾞｯﾄがｸﾘｱされたら抜ける
+	}
+	SS_H;					//ﾃﾞｨｾﾚｸﾄ
+}
+
+
+//==============================================
+//ﾌﾞﾛｯｸが未消去のときは消去する
+//==============================================
+void block_erase(void)
+{
+	unsigned char data;
+
+	read_addr();				//読込みｱﾄﾞﾚｽ設定
+	data=spi_trans(0);			//読込む
+	SS_H;					//ﾃﾞｨｾﾚｸﾄ
+	if(data!=0xff)				//0xffでなかったら消去する
+	{
+		write_enable();			//書込み許可
+		spi_trans(W25_BlockErs64);	//ﾌﾞﾛｯｸ消去(64kﾊﾞｲﾄ)
+		set_addr();			//ｱﾄﾞﾚｽ設定
+		wait_done();			//実行完了を待つ
+	}
+}
+
+
+//==============================================
+//ﾀｲﾏｰ0ｵｰﾊﾞﾌﾛｰ割込みﾊﾝﾄﾞﾗ
+//再生中はPWM周期(32us)毎に呼び出され､4回毎(128us)にPWMﾃﾞｭｰﾃｨｻｲｸﾙを更新する
+//ﾃﾞｭｰﾃｨ値は1の補数で設定する
+//録音中は音声ｻﾝﾌﾟﾘﾝｸﾞ周期(256us)毎に呼び出され､ADC結果をﾊﾞｯﾌｧに格納する
+//録音中はﾊﾞｯﾌｧｵｰﾊﾞｰﾗﾝをﾁｪｯｸしない
+//ADC結果評価のﾊﾞｲｽ値を自動調整することで､ﾊｰﾄﾞｳｪｱのﾊﾞｲｽ変動に対応する
+//==============================================
+ISR(TIM0_OVF_vect)
+{
+	unsigned short data;
+
+	if(pwm_ps)				//再生中のとき
+	{
+		if(pwm_ps++==PWM_PS)		//PWMﾃﾞｭｰﾃｨ更新ﾀｲﾐﾝｸﾞになったら
+		{
+			if(buf_read!=buf_write)	//ﾊﾞｯﾌｧにﾃﾞｰﾀがあったら
+			{
+				OCR0A=~buf[buf_read++];
+						//ﾊﾞｯﾌｧからﾃﾞｭｰﾃｨ値を取出し更新する
+				if(buf_read==BUF_SIZE) buf_read=0;
+						//ﾊﾞｯﾌｧの後尾になったら先頭に戻す
+			}
+			pwm_ps=1;		//ﾌﾟﾘｽｹを初期化する
+		}
+	}
+	else					//録音中のとき
+	{
+		data=ADCL;			//ADC結果下位を取込む
+		data+=((unsigned short)ADCH*256);
+						//ADC結果上位を取込む
+
+//ADCｽﾀﾌﾞを利用するとき
+#ifdef	ADC_STUB
+	static unsigned short ADCD;
+	ADCD--;
+	ADCD&=0x3ff;
+	data=ADCD;
+#endif
+
+		if(data>adc_bias) adc_bias++;	//ADC結果がﾊﾞｲｱｽ値を超えていたら
+						//　ﾊﾞｲｱｽ値をﾗﾝﾌﾟ上昇させる
+		else adc_bias=data;		//ADC結果がﾊﾞｲｱｽ値以下のときは
+						//　ADC結果をﾊﾞｲｽ値とする
+		if((data-=adc_bias)>0xfe) data=0xfe;
+						//ﾊﾞｲｱｽ値を超えた分を評価値とし
+						//　最大0xfeに規制する
+						//　(消去済みｾﾙと識別するため)
+		buf[buf_write++]=data;		//評価値をﾊﾞｯﾌｧに格納する
+		if(buf_write==BUF_SIZE) buf_write=0;
+						//ﾊﾞｯﾌｧの後尾になったら先頭に戻す
+		ADCSRA|=(1<<ADSC);		//次の変換を開始しておく
+	}
+}
+
+
+//==============================================
+//ﾒｲﾝ処理
+//==============================================
+int main(void)
+{
+	unsigned long addr_st=0,addr_end;	//録音･再生の開始･終了ｱﾄﾞﾚｽ
+	unsigned char data;			//音声ﾃﾞｰﾀ
+	unsigned short timer;			//計時ｶｳﾝﾀ
+	unsigned char pb_times;			//繰返し再生回数ｶｳﾝﾀ
+	unsigned short pb_len;			//繰返し再生長さ
+	unsigned char n;
+
+
+	//ｸﾛｯｸ設定
+#ifdef OSCCAL_VALUE
+	OSCCAL=OSCCAL_VALUE;			//内臓ｵｼﾚｰﾀのｷｬﾘﾌﾞﾚｰｼｮﾝ
+#endif
+
+	//I/Oﾎﾟｰﾄ設定
+	DDRB=(1<<PWM_BIT)|(1<<SS_BIT)|(1<<MOSI_BIT)|(1<<SCK_BIT);
+						//PWM､SS､MOSI､SCKを出力ﾓｰﾄﾞ
+	SS_H;					//SSをHにしておく
+
+#ifdef SHDBG			//デバグ情報を取得するとき
+	DDRB|=(1<<DBG_BIT);			//DBGを出力ﾓｰﾄﾞ
+	PORTB|=(1<<DBG_BIT);			//DBGをH
+#endif
+
+	//PWM設定
+	OCR0A=255;				//ﾃﾞｭｰﾃｨ初期値(ﾃﾞｭｰﾃｨ0)
+	TCCR0A=0b11000011;			//比較Aは反転出力､比較Bは非出力､
+	TCCR0B=0b00000001;			//　8ﾋﾞｯﾄ高速PWM動作､ﾌﾟﾘｽｹなし
+	TIMSK0=0b00000010;			//TMR0ｵｰﾊﾞﾌﾛｰ割込み許可
+
+	//ADC設定
+	DIDR0|=(1<<ADC_BIT);			//ADC0ﾋﾟﾝのﾃﾞｼﾞﾀﾙ入力を禁止しておく
+	ADMUX=0b00000000;			//VrefはVcc､結果は右詰め､入力はADC0(PB5)
+	ADCSRA=0b10000011;			//ADC有効､変換開始しない､連続動作しない､
+						//　割込みしない､ｸﾛｯｸは8分周(8MHz/8=1MHz)
+	//最初のﾒﾓﾘ割当てをﾗﾝﾀﾞﾏｲｽﾞする
+	ADCSRA|=(1<<ADSC);			//雑音をADCする
+	while(ADCSRA&(1<<ADSC));		//ADC完了を待つ
+	addr_st=((unsigned long)ADCL<<16)&(MM_FULL-1);
+						//ﾉｲｽﾞのADC結果でﾒﾓﾘｱﾄﾞﾚｽを決める
+	data=ADCH;				//ADCHを空読みしておく
+
+
+	//ﾒｲﾝﾙｰﾌﾟ
+	for(;;)
+	{
+		//録音処理前のﾌﾞﾛｯｸ消去
+	DBG_C('a');
+		mm_addr=addr_st;		//割当て先頭ｱﾄﾞﾚｽを設定
+		block_erase();			//ﾌﾞﾛｯｸが未消去のときは消去する
+		mm_addr+=MM_SIZE-1;		//割当て後尾ｱﾄﾞﾚｽを設定
+		block_erase();			//ﾌﾞﾛｯｸが未消去のときは消去する
+		mm_addr=addr_st;		//割当て先頭ｱﾄﾞﾚｽを設定
+		addr_end=addr_st+MM_SIZE;	//割当て終了ｱﾄﾞﾚｽを設定
+
+		//録音の設定
+	DBG_C('b');
+		pwm_ps=0;			//録音中を表示する
+		buf_read=buf_write=0;		//ﾊﾞｯﾌｧをｸﾘｱしておく
+		TCCR0B=0b00000010;		//PWMﾌﾟﾘｽｹを1/8にする(割込み周期=256us)
+		sei();				//割込み許可
+
+		//音声を待つ
+		timer=NO_SENSE;			//不感期間
+		for(;;)
+		{
+			if(buf_read==buf_write) continue;
+						//音声ﾃﾞｰﾀが無かったら待つ
+			data=buf[buf_read++];	//音声ﾃﾞｰﾀを取出す
+			if(buf_read==BUF_SIZE) buf_read=0;
+						//ﾊﾞｯﾌｧの後尾になったら先頭に戻す
+			if(timer) timer--;	//不感期間をﾃﾞｸﾘする
+			else
+			{
+				if(data>VOICE_ON) break;
+						//音声を検出したら抜ける
+			}
+		}
+
+		//録音の実行
+	DBG_C('c');
+		for(;;)
+		{
+			if(!(mm_addr&(MM_PAGE-1)))
+						//ﾍﾟｰｼﾞ境界のとき
+			{
+				write_addr();
+			}
+
+			spi_trans(data);	//音声ﾃﾞｰﾀを送信する
+			mm_addr++;	//ｱﾄﾞﾚｽを進める
+			if(!(mm_addr&(MM_PAGE-1)))
+						//ﾍﾟｰｼﾞ境界のときは
+			{
+				SS_H;		//書込み実行
+				wait_done();	//書込み完了を待つ
+			}
+			if(mm_addr==addr_end) break;
+						//ﾒﾓﾘが満杯になったら抜ける
+			while(buf_read==buf_write);
+						//音声ﾃﾞｰﾀを待つ
+			data=buf[buf_read];
+			if(buf_read==(BUF_SIZE-1)) buf_read=0;
+						//ﾊﾞｯﾌｧの後尾になったら先頭に戻す
+			else buf_read++;	//ﾊﾞｯﾌｧを進める
+			if(timer++>NO_VOICE) break;
+						//音声を一定時間検出しなかったら抜ける
+			else
+			{
+				if(data>VOICE_ON) timer=0;
+						//音声を検出したら計時値をｸﾘｱする
+			}
+		}
+		if((mm_addr&(MM_PAGE-1)))	//端数ﾃﾞｰﾀがあるときは
+		{
+			wait_done();		//書込み完了を待つ
+		}
+
+		//再生処理の設定
+	DBG_C('d');
+		cli();				//割込み禁止
+		addr_end=mm_addr;		//終了ｱﾄﾞﾚｽを記録しておく
+		pwm_ps=1;			//再生中を表示する
+		buf_read=buf_write=0;		//ﾊﾞｯﾌｧをｸﾘｱしておく
+		TCCR0B=0b00000001;		//PWMﾌﾟﾘｽｹを1/1にする(割込み周期=32us)
+		sei();				//割込み許可
+
+		//再生の実行
+		for(mm_addr=addr_st;(mm_addr+PB_LEN)<addr_end;mm_addr+=PB_LEN)
+		{
+			for(pb_times=0;pb_times<PB_TIMES;pb_times++)
+							//再生を繰返す
+			{
+				read_addr();		//読込みｱﾄﾞﾚｽ設定
+				for(pb_len=1;pb_len<=PB_LEN;pb_len++)
+				{
+					data=spi_trans(0);
+					if((n=buf_write+1)==BUF_SIZE) n=0;
+							//書込みﾎﾟｲﾝﾀを進めてみる
+					while(buf_read==n);
+							//ﾊﾞｯﾌｧが空くのを待つ
+					buf[n]=data;	//ﾊﾞｯﾌｧに音声ﾃﾞｰﾀを格納する
+					buf_write=n;	//書込みﾎﾟｲﾝﾀを更新する
+				}
+				SS_H;			//受信を終了する
+			}
+		}
+		cli();				//割込み禁止
+		OCR0A=255;			//ﾃﾞｭｰﾃｨ0にする
+
+		//次の書込み開始ｱﾄﾞﾚｽを更新
+	DBG_C('e');
+		addr_st=(addr_end+(MM_PAGE-1))&~(MM_PAGE-1)&(MM_FULL-1);
+						//ﾍﾟｰｼﾞ境界に切上げて
+						//　全容量でﾛｰﾙｵｰﾊﾞｰさせる
+	}
+}
