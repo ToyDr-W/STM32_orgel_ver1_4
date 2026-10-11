@@ -1,0 +1,16 @@
+Dependencies for Project 'orgel_SW_G031J6', Target 'Target_1': (DO NOT MODIFY !)
+CompilerVersion: 6220000::V6.22::ARMCLANG
+F (.\song_idx.s)(0x685BB0F5)(--target=arm-arm-none-eabi -mcpu=cortex-m0plus -masm=auto  -Wa,armasm,--diag_suppress=A1950W -c-gdwarf-4-IC:/Users/ooizumis/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/2.0.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-Wa,armasm,--pd,"__UVISION_VERSION SETA 541" -Wa,armasm,--pd,"STM32G031xx SETA 1"-o ./objects/song_idx.o)
+F (.\startup_stm32g030xx.s)(0x67D0E13C)(--target=arm-arm-none-eabi -mcpu=cortex-m0plus -masm=auto  -Wa,armasm,--diag_suppress=A1950W -c-gdwarf-4-IC:/Users/ooizumis/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/2.0.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-Wa,armasm,--pd,"__UVISION_VERSION SETA 541" -Wa,armasm,--pd,"STM32G031xx SETA 1"-o ./objects/startup_stm32g030xx.o)
+F (.\main.c)(0x685A4ABE)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../include-IC:/Users/ooizumis/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/2.0.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="541" -DSTM32G031xx-o ./objects/main.o -MMD)
+I (..\include\stm32g0xx.h)(0x67D0E13C)
+I (..\include\stm32g031xx.h)(0x67D0E13B)
+I (..\include\core_cm0plus.h)(0x664BCA78)
+I (..\include\system_stm32g0xx.h)(0x67D0E13C)
+I (orgel_cnf.h)(0x686D00F3)
+I (..\orgel.h)(0x67FB015D)
+I (..\dev_G03x_8.c)(0x686CF87D)
+I (..\common.c)(0x67EC7D76)
+I (..\orgel.c)(0x67EDFDD8)
+I (..\apl_SW.c)(0x67FA4A31)
+I (..\func_SW.c)(0x6788BD94)

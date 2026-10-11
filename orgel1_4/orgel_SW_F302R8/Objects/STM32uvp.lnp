@@ -1,0 +1,8 @@
+--cpu=Cortex-M4.fp.sp
+".\objects\startup_stm32f302x8.o"
+".\objects\main.o"
+".\objects\song_idx.o"
+--strict --scatter ".\Objects\STM32uvp.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\STM32uvp.map" -o .\Objects\STM32uvp.axf
