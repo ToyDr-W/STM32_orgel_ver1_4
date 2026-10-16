@@ -4,18 +4,30 @@
 //#define	SHDBG_SOFT	//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装するときに宣言する		
 
 //#define	SPI_SOFT	//SPIをｿﾌﾄ実装するときに宣言する
-#define		SHSPI2		//2線SPIのときに宣言する
+//#define	SHSPI2		//2線SPIのときに宣言する
 //#define	SHSPI3		//3線SPIのときに宣言する
 
 //#define	MFRC_SPI3	3線SPIのときに宣言する
 #define		MFRC_SPI2	2線SPIのときに宣言する
+
+#define		VOICEN_IMA	//音声NがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
+#define		VOICEI_IMA	//音声IがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
+#define		VOICES_IMA	//音声SがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
+
+//#define	ISP_SPIFLASH_EN	//ISP環境でSPIﾌﾗｯｼｭを書替えるときに宣言する
+				//(自動的に､ﾃﾞﾊﾞｸﾞ情報のUART内蔵ﾓｼﾞｭｰﾙを230400bpsで使用する)
+				//(通常のｱﾌﾟﾘは実行されない)
 
 
 /*
 STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 これは根のｿｰｽｺｰﾄﾞ
 
+・ISP形態でSPIﾌﾗｯｼｭを書替える機能(ISP_SPIFLASH)に対応している｡
+
 ・ﾀｰｹﾞｯﾄはSTM32F030C6T6(内部64MHzｸﾛｯｸ)
+
+以下は電子ｵﾙｺﾞｰﾙとして動作するときの説明である｡
 
 ・RFIDﾀｸﾞを読んで､対応する曲を演奏する｡
 
@@ -55,7 +67,7 @@ STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 W25Qのﾋﾟﾝ接(標準SPIﾓｰﾄﾞ)
 1:CS(2線SPIでは10k*220pの時定数回路を介してCLKに繋ぐ)
 2:DO(2線SPI･3線SPIではDIに繋ぐ)
-3:WP(GNDに接続)
+3:WP(GNDに接続､ISPを利用する場合はVccに接続)
 4:GND
 5:DI
 6:CLK
@@ -84,21 +96,21 @@ STM32F030C6T6のﾎﾟｰﾄの割当て
 2:(PC13)空き
 3:(PC14)空き
 4:(PC15)空き
-5:(PF0)ﾃﾞﾊﾞｸﾞ信号出力
+5:(PF0)空き
 6:(PF1)空き
 7:NRST
 8:VSSA
 9:VDDA
-10:(PA0)SW0/(ADC_IN0)CVD3
-11:(PA1)SW1/(ADC_IN1)CVD2
-12:(PA2)SW2/(ADC_IN2)CVD1
-13:(PA3)SW3/(ADC_IN3)CVD0
+10:(PA0)BOOT0代替/(ADC_IN0)CVD3
+11:(PA1)SW0/(ADC_IN1)CVD2
+12:(PA2)SW1/(ADC_IN2)CVD1
+13:(PA3)SW2/(ADC_IN3)CVD0
 14:(PA4)/(ADC_IN4)CdS
 15:(PA5)SCK/(SPI1_SCK)(SDCのCLK･W25QのCLKに繋ぐ)
 16:(PA6)MISO/(SPI1_MISO)(SDCのDO･W25QのDOに繋ぐ､3線SPI･2線SPIのときは不使用)
 17:(PA7)MOSI/(SPI1_MOSI)(SDCのDI･W25QのDIに繋ぐ)
 18:(PB0)空き
-19:(PB1)
+19:(PB1)空き
 20:(PB2)空き
 21:(PB10)空き
 22:(PB11)空き
@@ -109,8 +121,8 @@ STM32F030C6T6のﾎﾟｰﾄの割当て
 27:(PB14)空き
 28:(PB15)空き
 29:(PA8)/(TIM1_CH1)正相出力
-30:(PA9)ﾃﾞﾊﾞｸﾞ情報出力/(USART1_TX)ﾃﾞﾊﾞｸﾞ情報出力/(ISP_TX)
-31:(PA10)/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力/(ISP_RX)
+30:(PA9)/(USART1_TX)ﾃﾞﾊﾞｸﾞ情報出力･UART出力/(ISP_TX)
+31:(PA10)/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力･UART入力/(ISP_RX)
 32:(PA11)/(TIM1_CH4)ﾌﾞﾘｯｼﾞ･ﾌﾞﾚｰｷ逆相出力
 33:(PA12)空き
 34:(PA13)SS(SDCのCS･W25QのCSに繋ぐ､2線SPIのときは不使用)/(SWDIO)
@@ -124,8 +136,8 @@ STM32F030C6T6のﾎﾟｰﾄの割当て
 42:(PB6)SCL/(I2C1_SCL)(24FCのSCLに繋ぐ)
 43:(PB7)SDA/(I2C1_SDA)(24FCのSDAに繋ぐ)
 44:BOOT0(外部ﾌﾟﾙﾀﾞｳﾝ)
-45:(PB8)空き
-46:(PB9)空き
+45:(PB8)ﾃﾞﾊﾞｸﾞ信号出力
+46:(PB9)ISP時のﾃﾞﾊﾞｸﾞ情報出力
 47:VSS
 48:VDD
 */
@@ -151,14 +163,31 @@ STM32F030C6T6のﾎﾟｰﾄの割当て
 //==============================================
 //構成情報(ｱﾌﾟﾘｹｰｼｮﾝとﾀｰｹﾞｯﾄﾃﾞﾊﾞｲｽに関わるもの)
 //==============================================
+//UARTのﾎﾟｰﾄ定義
+#define	UART_GPIO	GPIOA			//UART出力のﾎﾟｰﾄ
+#define	UART_BIT	9			//UART出力のﾋﾞｯﾄ
+#define	UART_AF		1			//UART出力のUART交代機能番号
+#define	UART_IN_GPIO	GPIOA			//UART入力のﾎﾟｰﾄ
+#define	UART_IN_BIT	10			//UART入力のﾋﾞｯﾄ
+#define	UART_IN_AF	1			//UART入力のUART交代機能番号
+
 //ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ定義
-#define	DBS_GPIO	GPIOF			//ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ
-#define	DBS_BIT		0			//ﾃﾞﾊﾞｸﾞ信号のﾋﾞｯﾄ
+#define	DBS_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ
+#define	DBS_BIT		8			//ﾃﾞﾊﾞｸﾞ信号のﾋﾞｯﾄ
 
 //ﾃﾞﾊﾞｸﾞ情報のﾎﾟｰﾄ定義
-#define	DBG_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報のﾎﾟｰﾄ
-#define	DBG_BIT		14			//ﾃﾞﾊﾞｸﾞ情報のﾋﾞｯﾄ
-#define	DBG_AF		1			//UARTの交代機能番号
+#ifdef	ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#define	SHDBG_SOFT				//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装する
+#define	DBG_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
+#define	DBG_BIT		9			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
+#define	DBG_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
+#define	DBG_BIT		9			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
+#define	DBG_AF		1			//ﾃﾞﾊﾞｸﾞ情報出力のUART_TX交代機能番号
+#define	DBG_IN_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報入力のﾎﾟｰﾄ
+#define	DBG_IN_BIT	10			//ﾃﾞﾊﾞｸﾞ情報入力のﾋﾞｯﾄ
+#define	DBG_IN_AF	1			//ﾃﾞﾊﾞｸﾞ情報入力のUART_RX交代機能番号
+#endif
 
 //PWMのﾎﾟｰﾄ定義
 #define	PWM_F_GPIO	GPIOA			//PWM正相のﾎﾟｰﾄ
@@ -215,7 +244,7 @@ STM32F030C6T6のﾎﾟｰﾄの割当て
 //SW0のﾎﾟｰﾄ定義
 #define	SW0_GPIO	GPIOA			//SW0のﾎﾟｰﾄ
 #define	SW0_EXTI_PORT	0			//SW0のEXTIﾎﾟｰﾄ(0=PA､3=PD､5=PF)
-#define	SW0_BIT		0			//SW0のﾋﾞｯﾄ
+#define	SW0_BIT		1			//SW0のﾋﾞｯﾄ
 #define	SW0_INV					//SW0入力は負論理
 					//以下のﾀｲﾏｰﾓｰﾄﾞとﾘｱﾙﾓｰﾄﾞは択一
 #define SW0_TIMER				//SW0はﾀｲﾏｰﾓｰﾄﾞ
@@ -225,7 +254,7 @@ STM32F030C6T6のﾎﾟｰﾄの割当て
 //SW1のﾎﾟｰﾄ定義
 #define	SW1_GPIO	GPIOA			//SW1のﾎﾟｰﾄ
 #define	SW1_EXTI_PORT	0			//SW1のEXTIﾎﾟｰﾄ(0=PA､3=PD､5=PF)
-#define	SW1_BIT		1			//SW1のﾋﾞｯﾄ
+#define	SW1_BIT		2			//SW1のﾋﾞｯﾄ
 #define	SW1_INV					//SW1入力は負論理
 					//以下のﾀｲﾏｰﾓｰﾄﾞとﾘｱﾙﾓｰﾄﾞは択一
 #define SW1_TIMER				//SW1はﾀｲﾏｰﾓｰﾄﾞ
@@ -235,22 +264,12 @@ STM32F030C6T6のﾎﾟｰﾄの割当て
 //SW2のﾎﾟｰﾄ定義
 //#define	SW2_GPIO	GPIOA		//SW2のﾎﾟｰﾄ
 //#define	SW2_EXTI_PORT	0		//SW2のEXTIﾎﾟｰﾄ(0=PA､3=PD､5=PF)
-//#define	SW2_BIT		2		//SW2のﾋﾞｯﾄ
+//#define	SW2_BIT		3		//SW2のﾋﾞｯﾄ
 //#define	SW2_INV				//SW2入力は負論理
 //					//以下のﾀｲﾏｰﾓｰﾄﾞとﾘｱﾙﾓｰﾄﾞは択一
 //#define SW2_TIMER				//SW2はﾀｲﾏｰﾓｰﾄﾞ
 //#define	SW2_REAL			//SW2はﾘｱﾙﾓｰﾄﾞ
 //#define	SW2_CNT		VOICEN_CNT	//SW2の操作対象
-
-//SW3のﾎﾟｰﾄ定義
-//#define	SW3_GPIO	GPIOA		//SW3のﾎﾟｰﾄ
-//#define	SW3_EXTI_PORT	0		//SW3のEXTIﾎﾟｰﾄ(0=PA､3=PD､5=PF)
-//#define	SW3_BIT		2		//SW3のﾋﾞｯﾄ
-//#define	SW3_INV				//SW3入力は負論理
-//					//以下のﾀｲﾏｰﾓｰﾄﾞとﾘｱﾙﾓｰﾄﾞは択一
-//#define SW3_TIMER				//SW3はﾀｲﾏｰﾓｰﾄﾞ
-//#define	SW3_REAL			//SW3はﾘｱﾙﾓｰﾄﾞ
-//#define	SW3_CNT		NON_CNT		//SW3の操作対象
 
 //CdSのﾎﾟｰﾄ定義
 #define	CdS_GPIO	GPIOA			//CdSのﾎﾟｰﾄ
@@ -322,7 +341,7 @@ STM32F030C6T6のﾎﾟｰﾄの割当て
 #define	MFRC_MISO_BIT	3			//MFRC_MISOのﾋﾞｯﾄ
 #endif
 #ifdef  MFRC_SPI2			//2線SPIのとき
-#define MFRC_SS_TIME	5			//SSﾈｹﾞｰﾄ待ち時間[us]
+#define MFRC_SS_TIME	15			//SSﾈｹﾞｰﾄ待ち時間[us]
 #define MFRC_NSS_GPIO	MFRC_SCK_GPIO		//RC522_NSSのﾎﾟｰﾄ
 #define MFRC_NSS_BIT	MFRC_SCK_BIT		//RC522_NSSのﾋﾞｯﾄ
 #else					//4線SPIか3線SPIのとき
@@ -331,7 +350,7 @@ STM32F030C6T6のﾎﾟｰﾄの割当て
 #endif
 
 
-#if	PART_N>0
+#if	PART_N+KB_N>0
 //==============================================
 //ｿﾝｸﾞﾃﾞｰﾀのｲﾝﾃﾞｯｸｽ
 //==============================================
@@ -426,7 +445,16 @@ static const struct VOICES_HDR voiceS_idx[]=
 //==============================================
 #define	DEV_F030				//ﾃﾞﾊﾞｲｽはF030
 #define	DEV_F030Cx				//ﾃﾞﾊﾞｲｽはF030Cx
-#define	I2Cx	I2C1				//I2C1を使う
-#define	SPIx	SPI1				//SPI1を使う
+#define	DEV_I2C1				//I2C1を使う
+#define	I2Cx	I2C1				//I2CﾚｼﾞｽﾀはI2C1を指す
+#define	DEV_SPI1				//SPI1を使う
+#define	SPIx	SPI1				//SPIﾚｼﾞｽﾀはSPI1を指す
+#define	DEV_UART1				//UART1を使う
+#define	UARTx	USART1				//USARTﾚｼﾞｽﾀはUSART1を指す
+//#define	UARTBPS	115200			//UARTのﾎﾞｰﾚｰﾄ(ﾃﾞﾌｫﾙﾄ値は38400bps)
 #include "../dev_F030.c"			//F030ﾃﾞﾊﾞｲｽｺｰﾄﾞ
+#ifdef ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#include "../apl_ISP_SPIFLASH.c"		//ISP実行ｱﾌﾟﾘｹｰｼｮﾝ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
 #include "../apl_RFID.c"			//RFID操作ｱﾌﾟﾘｹｰｼｮﾝ
+#endif

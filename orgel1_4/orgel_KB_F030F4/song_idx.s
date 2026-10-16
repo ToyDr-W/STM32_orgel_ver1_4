@@ -13,13 +13,13 @@ song_idx_dmy
 	bx	LR
 
 
-	if PART_N>0			;µŸ∫ﬁ∞ŸââëtÇé¿ëïÇ∑ÇÈÇ∆Ç´
 ;==============================================
 ;ø›∏ﬁ≤›√ﬁØ∏Ω
 ;==============================================
 	align
 	export	SONG_IDX
 SONG_IDX
+	if PART_N>0			;µŸ∫ﬁ∞ŸââëtÇé¿ëïÇ∑ÇÈÇ∆Ç´
 	dcw	(song_idx_end-song_idx_bgn)/SONG_IDX_SZ	;¥›ƒÿêî
 	dcw	0
 song_idx_bgn
@@ -45,6 +45,7 @@ song_idx_bgn
  ;son_mac song_AKATONBO,song_AKATONBO_DEF 
  ;son_mac song_ALOHAOE3,song_ALOHAOE3_DEF 
  ;son_mac song_AMAZING,song_AMAZING_DEF 
+ ;son_mac song_AMBULANCE,song_AMBULANCE_DEF 
  ;son_mac song_AMEFURI,song_AMEFURI_DEF 
  ;son_mac song_AMEKUMA,song_AMEKUMA_DEF 
  ;son_mac song_AMETSUKI,song_AMETSUKI_DEF 
@@ -61,6 +62,7 @@ song_idx_bgn
  ;son_mac song_BANANABOAT,song_BANANABOAT_DEF 
  ;son_mac song_BIRTHDAY,song_BIRTHDAY_DEF 
  ;son_mac song_BIWAKO,song_BIWAKO_DEF 
+ ;son_mac song_BLINKER,song_BLINKER_DEF 
  ;son_mac song_BOLERO,song_BOLERO_DEF 
  ;son_mac song_BRAHMS,song_BRAHMS_DEF 
  ;son_mac song_BROWNJUG3,song_BROWNJUG3_DEF 
@@ -84,10 +86,12 @@ song_idx_bgn
  ;son_mac song_DOREMIFAAPM,song_DOREMIFAAPM_DEF 
  ;son_mac song_DREAMER,song_DREAMER_DEF 
  son_mac song_ELECTRICAL,song_ELECTRICAL_DEF 
+ ;son_mac song_FIRE,song_FIRE_DEF 
  ;son_mac song_FURUDOKEI,song_FURUDOKEI_DEF 
- son_mac song_FURUSATO,song_FURUSATO_DEF 
+ ;son_mac song_FURUSATO,song_FURUSATO_DEF 
  ;son_mac song_FURUSATO4,song_FURUSATO4_DEF 
  ;son_mac song_FUYUGESHIKI,song_FUYUGESHIKI_DEF 
+ son_mac song_FUYUNOSEIZA3,song_FUYUNOSEIZA3_DEF 
  ;son_mac song_FUYUNOUTA,song_FUYUNOUTA_DEF 
  ;son_mac song_FUYUNOYORU,song_FUYUNOYORU_DEF 
  ;son_mac song_GENKOTU,song_GENKOTU_DEF 
@@ -106,7 +110,8 @@ song_idx_bgn
  ;son_mac song_HIMAWARINO,song_HIMAWARINO_DEF 
  ;son_mac song_HINAMATSURI,song_HINAMATSURI_DEF 
  ;son_mac song_HOLDIRIDIA,song_HOLDIRIDIA_DEF 
- ;son_mac song_HOME,song_HOME_DEF 
+ son_mac song_HOME,song_HOME_DEF 
+ ;son_mac song_HORN,song_HORN_DEF 
  ;son_mac song_HOSINEGAI,song_HOSINEGAI_DEF 
  ;son_mac song_HOSISEKAI,song_HOSISEKAI_DEF 
  ;son_mac song_HOTARUHIKARI3,song_HOTARUHIKARI3_DEF 
@@ -115,7 +120,7 @@ song_idx_bgn
  ;son_mac song_INUOMAWARI,song_INUOMAWARI_DEF 
  ;son_mac song_ISSYUUKAN,song_ISSYUUKAN_DEF 
  ;son_mac song_ITOMAKI,song_ITOMAKI_DEF 
- ;son_mac song_JAMAICA,song_JAMAICA_DEF 
+ son_mac song_JAMAICA,song_JAMAICA_DEF 
  ;son_mac song_JINGLE,song_JINGLE_DEF 
  ;son_mac song_JUPITER,song_JUPITER_DEF 
  ;son_mac song_KAERUGASSHOU,song_KAERUGASSHOU_DEF 
@@ -133,7 +138,7 @@ song_idx_bgn
  ;son_mac song_KODOMOTO,song_KODOMOTO_DEF 
  ;son_mac song_KOHAN,song_KOHAN_DEF 
  ;son_mac song_KOINOBORI3,song_KOINOBORI3_DEF 
- son_mac song_KOKYONOSORA,song_KOKYONOSORA_DEF 
+ ;son_mac song_KOKYONOSORA,song_KOKYONOSORA_DEF 
  ;son_mac song_KUROIHITOMI,song_KUROIHITOMI_DEF 
  ;son_mac song_KUTSUNARU,song_KUTSUNARU_DEF 
  ;son_mac song_KYORO,song_KYORO_DEF 
@@ -149,9 +154,9 @@ song_idx_bgn
  ;son_mac song_MUSIKOE,song_MUSIKOE_DEF 
  ;son_mac song_MUSUNDE,song_MUSUNDE_DEF 
  ;son_mac song_NANATSU,song_NANATSU_DEF 
- ;son_mac song_NANATSU2,song_NANATSU2_DEF 
+ son_mac song_NANATSU2,song_NANATSU2_DEF 
  ;son_mac song_NATSUKINU,song_NATSUKINU_DEF 
- ;son_mac song_NEKOHUN,song_NEKOHUN_DEF 
+ son_mac song_NEKOHUN,song_NEKOHUN_DEF 
  ;son_mac song_NEMURE,song_NEMURE_DEF 
  ;son_mac song_NEMURE2,song_NEMURE2_DEF 
  ;son_mac song_NOBARA,song_NOBARA_DEF 
@@ -167,8 +172,9 @@ song_idx_bgn
  ;son_mac song_OSHOGATSU3,song_OSHOGATSU3_DEF 
  ;son_mac song_OTUKAIARISAN,song_OTUKAIARISAN_DEF 
  ;son_mac song_PARISORA4,song_PARISORA4_DEF 
+ ;son_mac song_PATCAR,song_PATCAR_DEF 
  ;son_mac song_PECHKA,song_PECHKA_DEF 
- ;son_mac song_PICNIC,song_PICNIC_DEF 
+ son_mac song_PICNIC,song_PICNIC_DEF 
  ;son_mac song_PONYO,song_PONYO_DEF 
  ;son_mac song_RAILWAY,song_RAILWAY_DEF 
  ;son_mac song_REPUBLIC,song_REPUBLIC_DEF 
@@ -222,10 +228,8 @@ song_idx_bgn
 song_idx_end
 	endif
 
-
 ;==============================================
 ;îgå`√ﬁ∞¿ÇÃåƒçûÇ›
-;µŸ∫ﬁ∞ŸââëtÇ∆∑∞Œﬁ∞ƒﬁââëtÇ≈égÇ§Ç‡ÇÃÇåƒçûÇﬁÇ±Ç∆
 ;==============================================
 	include	../enve_EXP.asm
 	include	../enve_RSN.asm
@@ -233,8 +237,26 @@ song_idx_end
 	include	../enve_TREMOLO.asm
 	include	../enve_ELEGANTE.asm
 	include	../wave_SIN14.asm
+	include	../wave_SQUARE.asm
 	include	../wave_SHEPARD.asm
 	include	../wave_RING4.asm
+ if :def:song_AMBULANCE_DEF 
+	include	../pitch_AMBULANCE.asm
+ endif
+ if :def:song_BLINKER_DEF 
+	include	../effect_BLINKER.asm
+ endif
+ if :def:song_ENGINE_DEF 
+	include	../effect_ENGINE1.asm
+	include	../effect_ENGINE2.asm
+ endif
+ if :def:song_FIRE_DEF 
+	include	../pitch_FIRE.asm
+	include	../effect_KANE.asm
+ endif
+ if :def:song_PATCAR_DEF 
+	include	../pitch_PATCAR.asm
+ endif
 
 
 ;==============================================

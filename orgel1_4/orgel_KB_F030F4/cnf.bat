@@ -28,8 +28,8 @@ call make_cnf.bat	VOICEC_VOL	100	//音声Cのﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	VOICES0_VOL	100	//音声S0のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	VOICES1_VOL	100	//音声S1のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	VOICES2_VOL	100	//音声S2のﾎﾞﾘｭｰﾑ配分[%]
-call make_cnf.bat	ORGEL_VOL	100	//ｵﾙｺﾞｰﾙ演奏のﾎﾞﾘｭｰﾑ配分[%]
-call make_cnf.bat	KB0_VOL		100	//KB0演奏のﾎﾞﾘｭｰﾑ配分[%]
+call make_cnf.bat	ORGEL_VOL	50	//ｵﾙｺﾞｰﾙ演奏のﾎﾞﾘｭｰﾑ配分[%]
+call make_cnf.bat	KB0_VOL		50	//KB0演奏のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	KB1_VOL		100	//KB1演奏のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	VOICE_N		0	//音声N発声数の最大値(最大値3､
 rem						//　0のときは音声再生機能を実装しない)
@@ -44,12 +44,4 @@ rem						//　0のときはｵﾙｺﾞｰﾙ演奏機能を
 rem						//　実装しない)
 call make_cnf.bat	KB_N		2	//KB演奏有効ﾊﾟｰﾄ数の最大値
 rem						//　(0のときはKB演奏機能を実装しない)
-call make_cnf.bat	KB_PSN		(100000000/30/PWM_PR/SONG_PS/8+5)/10
-rem						//KB演奏用音価ﾌﾟﾘｽｹｰﾙ値(ﾃﾝﾎﾟ=30)
-call make_cnf.bat	KB_EPSENV	(23000*10/PWM_PR/SONG_PS+5)/10
-rem						//KB演奏用ｴﾝﾍﾞﾛｰﾌﾟ処理ﾌﾟﾘｽｹｰﾙ値
-rem						//　EPS*ENV相当の値(23000)
-call make_cnf.bat	KB_PPSPIT	(1000*10/PWM_PR/SONG_PS+5)/10
-rem						//KB演奏用ﾋﾟｯﾁﾍﾞﾝﾄﾞ処理ﾌﾟﾘｽｹｰﾙ値
-rem						//　PPS*PIT相当の値(1000)
 echo; end >> orgel_cnf.inc

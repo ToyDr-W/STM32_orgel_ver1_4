@@ -1,8 +1,6 @@
 //#define	SHDBS		//ﾃﾞﾊﾞｸﾞ信号を出力するときに宣言する
-#define		SHDBG		//ﾃﾞﾊﾞｸﾞ情報を出力するときに宣言する
+//#define	SHDBG		//ﾃﾞﾊﾞｸﾞ情報を出力するときに宣言する
 //#define	SHBPS	115200	//ﾃﾞﾊﾞｸﾞ情報のﾎﾞｰﾚｰﾄを宣言する(ﾃﾞﾌｫﾙﾄ値は38400bps)
-//#define	SHDBG_SOFT	//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装するときに宣言する		
-#define		SHDBG_IN	//ﾃﾞﾊﾞｸﾞ情報を入力するときに宣言する(UARTのｿﾌﾄ実装は不可)
 
 //下記のI2C_SOFTとSPI_SOFTの選択でﾋﾟﾝ割り当てが変わることに留意すること
 //#define	I2C_SOFT	//I2Cをｿﾌﾄ実装するときに宣言する
@@ -35,28 +33,24 @@
 #define		VOICEI_IMA	//音声IがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
 #define		VOICES_IMA	//音声SがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
 
+//#define	ISP_SPIFLASH_EN	//ISP環境でSPIﾌﾗｯｼｭを書替えるときに宣言する
+				//(自動的に､ﾃﾞﾊﾞｸﾞ情報のUART内蔵ﾓｼﾞｭｰﾙを230400bpsで使用する)
+				//(通常のｱﾌﾟﾘは実行されない)
+
 
 /*
 STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 これは根のｿｰｽｺｰﾄﾞ
 
+・ISP形態でSPIﾌﾗｯｼｭを書替える機能(ISP_SPIFLASH)に対応している｡
+
 ・ﾀｰｹﾞｯﾄはSTM32F030F4P6(内部64MHzｸﾛｯｸ)
 
-・複数のSW･単数のCdS･複数のCVDを実装可能｡但しﾎﾟｰﾄ割当てが可能なもの｡
-・それぞれをｵﾙｺﾞｰﾙ演奏･ﾌﾗｯｼｭ音声再生･ﾌﾟﾛｸﾞﾗﾑ音声再生の開始･中断に充てることができる｡
-・短ｵﾝで開始､長ｵﾝで中断する｡
-・曲･音声はﾗｳﾝﾄﾞﾛﾋﾞﾝ･ﾗﾝﾀﾞﾑが可能｡
+以下は電子ｵﾙｺﾞｰﾙとして動作するときの説明である｡
 
-・SWはﾎﾟｰﾄ-GND間に設置し､負論理(導通=L)で入力する｡
+・UARTから演奏ｺｰﾄﾞを受信して､該当する音符ﾃﾞｰﾀをｴﾝｼﾞﾝへ送って演奏する｡
 
-・CdSはﾎﾟｰﾄ-GND間に設置し､正論理(暗=H)で入力する｡
-
-・CVDはCVDﾊﾟｯﾄﾞﾎﾟｰﾄから10kΩの抵抗を介してﾎﾟｰﾄに入力する｡
-　10kΩはﾎﾟｰﾄ保護のためであり､必須ではない｡
-
-・xxxx_AUTOを宣言することで､自動的に曲を演奏開始､及び音声を再生開始する｡
-
-・音声ﾃﾞｰﾀはﾌﾟﾛｸﾞﾗﾑﾒﾓﾘ､I2Cﾌﾗｯｼｭ､SDｶｰﾄﾞ､SPIﾌﾗｯｼｭに格納しておく｡
+・UARTの通信ﾊﾟﾗﾒｰﾀは230400bps､8ﾃﾞｰﾀﾋﾞｯﾄ､ﾊﾟﾘﾃｨ無し､1ｽﾄｯﾌﾟﾋﾞｯﾄ､ﾌﾛｰ制御無し｡
 
 
 //==============================================
@@ -92,7 +86,7 @@ STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 W25Qのﾋﾟﾝ接(標準SPIﾓｰﾄﾞ)
 1:CS(2線SPIでは10k*220pの時定数回路を介してCLKに繋ぐ)
 2:DO(2線SPI･3線SPIではDIに繋ぐ)
-3:WP(GNDに接続)
+3:WP(GNDに接続､ISPを利用する場合はVccに接続)
 4:GND
 5:DI
 6:CLK
@@ -107,7 +101,7 @@ W25Qのﾋﾟﾝ接(標準SPIﾓｰﾄﾞ)
 //SPI内蔵ﾓｼﾞｭｰﾙはPA5(SPI1_SCK)･PA6(SPI1_MISO)･PA7(SPI1_MOSI)しかない｡
 //I2C内蔵ﾓｼﾞｭｰﾙはPA8(I2C1_SCL)･PA10(I2C1_SDA)しかない｡
 //残るﾋﾟﾝでPWM出力が可能なﾋﾟﾝはPB1(TIM1_CH3N/TIM3_CH4)しかない。
-//TIM3はｺﾝﾌﾟﾘ出力が無くいので､TIM1_CH3Nを正相に割当てる｡
+//TIM3はｺﾝﾌﾟﾘ出力が無いので､TIM1_CH3Nを正相に割当てる｡
 //逆相はSPI又はI2Cをｿﾌﾄ実装して､PWMﾋﾟﾝを確保する｡
 //
 //ﾋﾟﾝ割当てﾊﾟﾀｰﾝ選択の指針
@@ -122,12 +116,11 @@ STM32F030F4P6のﾎﾟｰﾄの割当て
 1:BOOT0
 2:(PF0)
 3:(PF1)
-4:NRST
 5:VDDA
 6:(PA0)BOOT0代替､SW2/(ADC_IN0)CdS･CVD2
 7:(PA1)SW1/(ADC_IN1)CVD1
 8:(PA2)SW0/(ADC_IN2)CVD0
-9:(PA3)ﾃﾞﾊﾞｸﾞ信号出力/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力
+9:(PA3)ﾃﾞﾊﾞｸﾞ信号出力/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力･UART入力
 10:(PA4)SS(SDCのCS･W25QのCSに繋ぐ)
 11:(PA5)/(SPI1_SCK)(SDCのCLK･W25QのCLKに繋ぐ)
 12:(PA6)/(SPI1_MISO)(SDCのDO･W25QのDOに繋ぐ)
@@ -137,8 +130,8 @@ STM32F030F4P6のﾎﾟｰﾄの割当て
 16:VDD
 17:(PA9)/(I2C1_SCL)SCL/(ISP_TX)
 18:(PA10)/(I2C1_SDA)SDA/(ISP_RX)
-19:(PA13)LED0/(SWDIO)
-20:(PA14)LED1･ﾃﾞﾊﾞｸﾞ情報出力/(USART1_TX)ﾃﾞﾊﾞｸﾞ情報出力/(SWCLK)
+19:(PA13)LED0･ﾃﾞﾊﾞｸﾞ情報出力(ｿﾌﾄ実装)/(SWDIO)
+20:(PA14)LED1/(USART1_TX)UART出力/(SWCLK)
 
 //SPI=内蔵ﾓｼﾞｭｰﾙ､I2C=ｿﾌﾄ実装のとき､PWMは全出力ﾀｲﾌﾟが可能
 1:BOOT0
@@ -149,7 +142,7 @@ STM32F030F4P6のﾎﾟｰﾄの割当て
 6:(PA0)BOOT0代替､SW2/(ADC_IN0)CdS
 7:(PA1)SW1/(ADC_IN1)CVD1
 8:(PA2)SW0/(ADC_IN2)CVD0
-9:(PA3)ﾃﾞﾊﾞｸﾞ信号出力/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力
+9:(PA3)ﾃﾞﾊﾞｸﾞ信号出力/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力･UART入力
 10:(PA4)SS(SDCのCS･W25QのCSに繋ぐ)
 11:(PA5)/(SPI1_SCK)(SDCのCLK･W25QのCLKに繋ぐ)
 12:(PA6)/(SPI1_MISO)(SDCのDO･W25QのDOに繋ぐ)
@@ -159,8 +152,8 @@ STM32F030F4P6のﾎﾟｰﾄの割当て
 16:VDD
 17:(PA9)/(TIM1_CH2)ﾌﾞﾘｯｼﾞ･ﾌﾞﾚｰｷ逆相出力/(ISP_TX)
 18:(PA10)/(TIM1_CH3)ｺﾝﾌﾟﾘ逆相出力/(ISP_RX)
-19:(PA13)LED0/(SWDIO)
-20:(PA14)LED1･ﾃﾞﾊﾞｸﾞ情報出力/(USART1_TX)ﾃﾞﾊﾞｸﾞ情報出力/(SWCLK)
+19:(PA13)LED0･ﾃﾞﾊﾞｸﾞ情報出力(ｿﾌﾄ実装)/(SWDIO)
+20:(PA14)LED1/(USART1_TX)UART出力/(SWCLK)
 
 //SPI=ｿﾌﾄ実装､I2C=内蔵ﾓｼﾞｭｰﾙのとき､PWMはｼﾝｸﾞﾙ･ﾌﾞﾘｯｼﾞ･ﾌﾞﾚｰｷ出力が可能､ｺﾝﾌﾟﾘ出力は不可
 1:BOOT0
@@ -171,7 +164,7 @@ STM32F030F4P6のﾎﾟｰﾄの割当て
 6:(PA0)BOOT0代替､SW2/(ADC_IN0)CdS
 7:(PA1)SW1/(ADC_IN1)CVD1
 8:(PA2)SW0/(ADC_IN2)CVD0
-9:(PA3)ﾃﾞﾊﾞｸﾞ信号出力/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力
+9:(PA3)ﾃﾞﾊﾞｸﾞ信号出力/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力･UART入力
 10:(PA4)SS(SDCのCS･W25QのCSに繋ぐ)
 11:(PA5)SCK(SDCのCLK･W25QのCLKに繋ぐ)
 12:(PA6)MISO(SDCのDO･W25QのDOに繋ぐ､3線SPI･2線SPIのときは不使用)
@@ -181,8 +174,8 @@ STM32F030F4P6のﾎﾟｰﾄの割当て
 16:VDD
 17:(PA9)/(I2C1_SCL)SCL/(ISP_TX)
 18:(PA10)/(I2C1_SDA)SDA/(ISP_RX)
-19:(PA13)LED0/(SWDIO)
-20:(PA14)LED1･ﾃﾞﾊﾞｸﾞ情報出力/(USART1_TX)ﾃﾞﾊﾞｸﾞ情報出力/(SWCLK)
+19:(PA13)LED0･ﾃﾞﾊﾞｸﾞ情報出力(ｿﾌﾄ実装)/(SWDIO)
+20:(PA14)LED1/(USART1_TX)UART出力/(SWCLK)
 
 //SPI=ｿﾌﾄ実装､I2C=ｿﾌﾄ実装のとき､PWMは全出力ﾀｲﾌﾟが可能
 1:BOOT0
@@ -193,7 +186,7 @@ STM32F030F4P6のﾎﾟｰﾄの割当て
 6:(PA0)BOOT0代替､SW2/(ADC_IN0)CdS
 7:(PA1)SW1/(ADC_IN1)CVD1
 8:(PA2)SW0/(ADC_IN2)CVD0
-9:(PA3)ﾃﾞﾊﾞｸﾞ信号出力/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力
+9:(PA3)ﾃﾞﾊﾞｸﾞ信号出力/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力･UART入力
 10:(PA4)SS(SDCのCS･W25QのCSに繋ぐ)
 11:(PA5)SCK(SDCのCLK･W25QのCLKに繋ぐ)
 12:(PA6)MISO(SDCのDO･W25QのDOに繋ぐ､3線SPI･2線SPIのときは不使用)
@@ -203,8 +196,8 @@ STM32F030F4P6のﾎﾟｰﾄの割当て
 16:VDD
 17:(PA9)(TIM1_CH2)ﾌﾞﾘｯｼﾞ･ﾌﾞﾚｰｷ逆相出力/(ISP_TX)
 18:(PA10)/(TIM1_CH3)ｺﾝﾌﾟﾘ逆相出力/(ISP_RX)
-19:(PA13)LED0/(SWDIO)
-20:(PA14)LED1･ﾃﾞﾊﾞｸﾞ情報出力/(USART1_TX)ﾃﾞﾊﾞｸﾞ情報出力/(SWCLK)
+19:(PA13)LED0･ﾃﾞﾊﾞｸﾞ情報出力(ｿﾌﾄ実装)/(SWDIO)
+20:(PA14)LED1/(USART1_TX)UART出力/(SWCLK)
 */
 
 
@@ -219,17 +212,31 @@ STM32F030F4P6のﾎﾟｰﾄの割当て
 //==============================================
 //構成情報(ｱﾌﾟﾘｹｰｼｮﾝとﾀｰｹﾞｯﾄﾃﾞﾊﾞｲｽに関わるもの)
 //==============================================
+//UARTのﾎﾟｰﾄ定義
+#define	UART_GPIO	GPIOA			//UART出力のﾎﾟｰﾄ
+#define	UART_BIT	14			//UART出力のﾋﾞｯﾄ
+#define	UART_AF		1			//UART出力のUART_TX交代機能番号
+#define	UART_IN_GPIO	GPIOA			//UART入力のﾎﾟｰﾄ
+#define	UART_IN_BIT	3			//UART入力のﾋﾞｯﾄ
+#define	UART_IN_AF	1			//UART入力のUART_RX交代機能番号
+
 //ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ定義
-#define	DBS_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ
-#define	DBS_BIT		1			//ﾃﾞﾊﾞｸﾞ信号のﾋﾞｯﾄ
+#define	DBS_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ
+#define	DBS_BIT		9			//ﾃﾞﾊﾞｸﾞ信号のﾋﾞｯﾄ
 
 //ﾃﾞﾊﾞｸﾞ情報のﾎﾟｰﾄ定義
+#ifdef	ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#define	SHDBG_SOFT				//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装する
+#define	DBG_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
+#define	DBG_BIT		13			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
+#else
 #define	DBG_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
 #define	DBG_BIT		14			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
-#define	DBG_AF		1			//ﾃﾞﾊﾞｸﾞ情報出力のUART交代機能番号
+#define	DBG_AF		1			//ﾃﾞﾊﾞｸﾞ情報出力のUART_TX交代機能番号
 #define	DBG_IN_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報入力のﾎﾟｰﾄ
 #define	DBG_IN_BIT	3			//ﾃﾞﾊﾞｸﾞ情報入力のﾋﾞｯﾄ
-#define	DBG_IN_AF	1			//ﾃﾞﾊﾞｸﾞ情報入力のUART交代機能番号
+#define	DBG_IN_AF	1			//ﾃﾞﾊﾞｸﾞ情報入力のUART_RX交代機能番号
+#endif
 
 #if defined(SHSPI2)||defined(SHSPI3)	//2線SPI又は3線SPIのとき
 #define	SPI_SOFT				//SPIはｿﾌﾄ実装になる
@@ -616,7 +623,16 @@ static const struct VOICES_HDR voiceS_idx[]=
 //==============================================
 #define	DEV_F030				//ﾃﾞﾊﾞｲｽはF030
 #define	DEV_F030F4				//ﾃﾞﾊﾞｲｽはF030F4
-#define	I2Cx	I2C1				//I2C1を使う
-#define	SPIx	SPI1				//SPI1を使う
+#define	DEV_I2C1				//I2C1を使う
+#define	I2Cx	I2C1				//I2CﾚｼﾞｽﾀはI2C1を指す
+#define	DEV_SPI1				//SPI1を使う
+#define	SPIx	SPI1				//SPIﾚｼﾞｽﾀはSPI1を指す
+#define	DEV_UART1				//UART1を使う
+#define	UARTx	USART1				//USARTﾚｼﾞｽﾀはUSART1を指す
+//#define	UARTBPS	115200			//UARTのﾎﾞｰﾚｰﾄ(ﾃﾞﾌｫﾙﾄ値は38400bps)
 #include "../dev_F030.c"			//F030ﾃﾞﾊﾞｲｽｺｰﾄﾞ
+#ifdef ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#include "../apl_ISP_SPIFLASH.c"		//ISP実行ｱﾌﾟﾘｹｰｼｮﾝ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
 #include "../apl_KB.c"				//KB操作ｱﾌﾟﾘｹｰｼｮﾝ
+#endif
