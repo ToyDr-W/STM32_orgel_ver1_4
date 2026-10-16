@@ -10,11 +10,11 @@
 //#define	SHSPI2		//2線SPIのときに宣言する
 //#define	SHSPI3		//3線SPIのときに宣言する
 #define		SLEEP_EN	//Sleep機能を実装するときに宣言する
-//#define	KYOKU_AUTO	//ｵﾙｺﾞｰﾙ演奏を自動開始するときに宣言する
-//#define	ONSEIN_AUTO	//音声N(ch0)再生を自動開始するときに宣言する
-//#define	ONSEII_AUTO	//音声I再生を自動開始するときに宣言する
-//#define	ONSEIC_AUTO	//音声C再生を自動開始するときに宣言する
-//#define	ONSEIS_AUTO	//音声S(ch0)再生を自動開始するときに宣言する
+#define	KYOKU_AUTO	//ｵﾙｺﾞｰﾙ演奏を自動開始するときに宣言する
+#define	ONSEIN_AUTO	//音声N(ch0)再生を自動開始するときに宣言する
+#define	ONSEII_AUTO	//音声I再生を自動開始するときに宣言する
+#define	ONSEIC_AUTO	//音声C再生を自動開始するときに宣言する
+#define	ONSEIS_AUTO	//音声S(ch0)再生を自動開始するときに宣言する
 //#define	RAND_CHSEL	0x00000001	//ﾗﾝﾀﾞﾏｲｽﾞの種にするCHSEL(PA0:ADC_IN0)
 //#define	KYOKU_RAND	//曲番号をﾗﾝﾀﾞﾏｲｽﾞするときに宣言する
 //#define	ONSEIN_RAND	//音声N番号をﾗﾝﾀﾞﾏｲｽﾞするときに宣言する
@@ -34,12 +34,20 @@
 #define		VOICEI_IMA	//音声IがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
 #define		VOICES_IMA	//音声SがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
 
+//#define	ISP_SPIFLASH_EN	//ISP環境でSPIﾌﾗｯｼｭを書替えるときに宣言する
+				//(自動的に､ﾃﾞﾊﾞｸﾞ情報のUART内蔵ﾓｼﾞｭｰﾙを230400bpsで使用する)
+				//(通常のｱﾌﾟﾘは実行されない)
+
 
 /*
 STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 これは根のｿｰｽｺｰﾄﾞ
 
+・ISP形態でSPIﾌﾗｯｼｭを書替える機能(ISP_SPIFLASH)に対応している｡
+
 ・ﾀｰｹﾞｯﾄはSTM32F103C6T6A(内部64MHzｸﾛｯｸ)
+
+以下は電子ｵﾙｺﾞｰﾙとして動作するときの説明である｡
 
 ・複数のSW･単数のCdS･複数のCVDを実装可能｡但しﾎﾟｰﾄ割当てが可能なもの｡
 ・それぞれをｵﾙｺﾞｰﾙ演奏･ﾌﾗｯｼｭ音声再生･ﾌﾟﾛｸﾞﾗﾑ音声再生の開始･中断に充てることができる｡
@@ -91,7 +99,7 @@ STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 W25Qのﾋﾟﾝ接(標準SPIﾓｰﾄﾞ)
 1:CS(2線SPIでは10k*220pの時定数回路を介してCLKに繋ぐ)
 2:DO(2線SPI･3線SPIではDIに繋ぐ)
-3:WP(GNDに接続)
+3:WP(GNDに接続､ISPを利用する場合はVccに接続)
 4:GND
 5:DI
 6:CLK
@@ -116,9 +124,9 @@ STM32F103C6T6Aのﾎﾟｰﾄの割当て
 8:VSSA
 9:VDDA
 10:(PA0)BOOT0代替
-11:(PA1)
-12:(PA2)
-13:(PA3)
+11:(PA1)空き
+12:(PA2)空き
+13:(PA3)空き
 14:(PA4)/(ADC12_IN4)CdS
 15:(PA5)/(ADC12_IN5)CVD0
 16:(PA6)/(ADC12_IN6)CVD1
@@ -130,13 +138,13 @@ STM32F103C6T6Aのﾎﾟｰﾄの割当て
 22:(PB11)SW3
 23:VSS
 24:VDD
-25:(PB12)
+25:(PB12)空き
 26:(PB13)/(TIM1_CH1N)PWMｺﾝﾌﾟﾘ逆相
-27:(PB14)
-28:(PB15)
+27:(PB14)空き
+28:(PB15)空き
 29:(PA8)/(TIM1_CH1)PWM正相
-30:(PA9)ﾃﾞﾊﾞｸﾞ情報出力/(USART1_TX)ﾃﾞﾊﾞｸﾞ情報出力/(ISP_TX)
-31:(PA10)ﾃﾞﾊﾞｸﾞ信号/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力/(ISP_RX)
+30:(PA9)/(USART1_TX)ﾃﾞﾊﾞｸﾞ情報出力･UART出力/(ISP_TX)
+31:(PA10)/(USART1_RX)ﾃﾞﾊﾞｸﾞ情報入力･UART入力/(ISP_RX)
 32:(PA11)/(TIM1_CH4)PWMﾌﾞﾘｯｼﾞ･ﾌﾞﾚｰｷ逆相
 33:(PA12)空き
 34:(PA13)/(SWDIO)
@@ -150,8 +158,8 @@ STM32F103C6T6Aのﾎﾟｰﾄの割当て
 42:(PB6)SCL/(I2C1_SCL)(24FCのSCLに繋ぐ)
 43:(PB7)SDA/(I2C1_SDA)(24FCのSDAに繋ぐ)
 44:BOOT0(外部ﾌﾟﾙﾀﾞｳﾝ)
-45:(PB8)
-46:(PB9)
+45:(PB8)ﾃﾞﾊﾞｸﾞ信号
+46:(PB9)ISP時のﾃﾞﾊﾞｸﾞ情報出力
 47:VSS
 48:VDD
 */
@@ -168,16 +176,31 @@ STM32F103C6T6Aのﾎﾟｰﾄの割当て
 //==============================================
 //構成情報(ｱﾌﾟﾘｹｰｼｮﾝとﾀｰｹﾞｯﾄﾃﾞﾊﾞｲｽに関わるもの)
 //==============================================
+//UARTのﾎﾟｰﾄ定義
+//#define	UART_REMAP	AFIO_MAPR_USART1_REMAP
+						//USART1をﾘﾏｯﾌﾟ(RB6､RB7)する
+#define	UART_GPIO	GPIOA			//UART出力のﾎﾟｰﾄ
+#define	UART_BIT	9			//UART出力のﾋﾞｯﾄ
+#define	UART_IN_GPIO	GPIOA			//UART入力のﾎﾟｰﾄ
+#define	UART_IN_BIT	10			//UART入力のﾋﾞｯﾄ
+
 //ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ定義
 #define	DBS_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ
-#define	DBS_BIT		7			//ﾃﾞﾊﾞｸﾞ信号のﾋﾞｯﾄ
+#define	DBS_BIT		8			//ﾃﾞﾊﾞｸﾞ信号のﾋﾞｯﾄ
 
 //ﾃﾞﾊﾞｸﾞ情報のﾎﾟｰﾄ定義
-//#define	DBG_REMAP	AFIO_MAPR_USART1_REMAP	//ﾃﾞﾊﾞｸﾞ情報USART1をﾘﾏｯﾌﾟ(RB6､RB7)する
+//#define	DBG_REMAP	AFIO_MAPR_USART1_REMAP
+						//ﾃﾞﾊﾞｸﾞ情報をﾘﾏｯﾌﾟ(RB6､RB7)する
+#ifdef	ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#define	SHDBG_SOFT				//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装する
+#define	DBG_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
+#define	DBG_BIT		9			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
 #define	DBG_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
 #define	DBG_BIT		9			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
 #define	DBG_IN_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報入力のﾎﾟｰﾄ
 #define	DBG_IN_BIT	10			//ﾃﾞﾊﾞｸﾞ情報入力のﾋﾞｯﾄ
+#endif
 
 //PWMのﾎﾟｰﾄ定義
 //#define	TIM1_REMAP	AFIO_MAPR_TIM1_REMAP_FULLREMAP
@@ -197,9 +220,6 @@ STM32F103C6T6Aのﾎﾟｰﾄの割当て
 #define I2C_SDA_BIT	7			//SDAのﾋﾞｯﾄ
 
 //SPIのﾎﾟｰﾄ定義
-#if defined(SHSPI2)||defined(SHSPI3)	//2線SPI又は3線SPIのとき
-#define	SPI_SOFT				//SPIはｿﾌﾄ実装になる
-#endif
 #define	SPI_REMAP	AFIO_MAPR_SPI1_REMAP	//SPI1_REMAPﾏｽｸ
 #define SPI_SCK_GPIO	GPIOB			//SCKのﾎﾟｰﾄ
 #define SPI_SCK_BIT	3			//SCKのﾋﾞｯﾄ
@@ -465,7 +485,16 @@ static const struct VOICES_HDR voiceS_idx[]=
 //共通ｺｰﾄﾞの呼込み
 //==============================================
 #define	DEV_F103				//ﾃﾞﾊﾞｲｽはF103
-#define	I2Cx	I2C1				//I2C1を使う
-#define	SPIx	SPI1				//SPI1を使う
+#define	DEV_I2C1				//I2C1を使う
+#define	I2Cx	I2C1				//I2CﾚｼﾞｽﾀはI2C1を指す
+#define	DEV_SPI1				//SPI1を使う
+#define	SPIx	SPI1				//SPIﾚｼﾞｽﾀはSPI1を指す
+#define	DEV_UART1				//UART1を使う
+#define	UARTx	USART1				//USARTﾚｼﾞｽﾀはUSART1を指す
+//#define	UARTBPS	115200			//UARTのﾎﾞｰﾚｰﾄ(ﾃﾞﾌｫﾙﾄ値は38400bps)
 #include "../dev_F103.c"			//F103ﾃﾞﾊﾞｲｽｺｰﾄﾞ
+#ifdef ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#include "../apl_ISP_SPIFLASH.c"		//ISP実行ｱﾌﾟﾘｹｰｼｮﾝ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
 #include "../apl_SW.c"				//SW操作ｱﾌﾟﾘｹｰｼｮﾝ
+#endif

@@ -293,31 +293,30 @@ Image Symbol Table
     __arm_cp.0_0                             0x080002ac   Number         4  main.o(.text.SystemInit)
     __arm_cp.0_1                             0x080002b0   Number         4  main.o(.text.SystemInit)
     [Anonymous Symbol]                       0x080002b4   Section        0  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
-    __arm_cp.2_0                             0x080002dc   Number         4  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
-    [Anonymous Symbol]                       0x080002e0   Section        0  main.o(.text.main)
-    __arm_cp.1_0                             0x0800058c   Number         4  main.o(.text.main)
-    __arm_cp.1_1                             0x08000590   Number         4  main.o(.text.main)
-    __arm_cp.1_2                             0x08000594   Number         4  main.o(.text.main)
-    __arm_cp.1_3                             0x08000598   Number         4  main.o(.text.main)
-    __arm_cp.1_4                             0x0800059c   Number         4  main.o(.text.main)
-    __arm_cp.1_5                             0x080005a0   Number         4  main.o(.text.main)
-    __arm_cp.1_6                             0x080005a4   Number         4  main.o(.text.main)
-    __arm_cp.1_7                             0x080005a8   Number         4  main.o(.text.main)
-    __arm_cp.1_8                             0x080005ac   Number         4  main.o(.text.main)
-    __arm_cp.1_9                             0x080005b0   Number         4  main.o(.text.main)
-    __arm_cp.1_10                            0x080005b4   Number         4  main.o(.text.main)
-    __arm_cp.1_11                            0x080005b8   Number         4  main.o(.text.main)
-    __arm_cp.1_12                            0x080005bc   Number         4  main.o(.text.main)
-    __arm_cp.1_13                            0x080005c0   Number         4  main.o(.text.main)
-    __arm_cp.1_14                            0x080005c4   Number         4  main.o(.text.main)
-    __arm_cp.1_15                            0x080005c8   Number         4  main.o(.text.main)
-    __arm_cp.1_16                            0x080005cc   Number         4  main.o(.text.main)
-    __arm_cp.1_17                            0x080005d0   Number         4  main.o(.text.main)
-    __arm_cp.1_18                            0x080005d4   Number         4  main.o(.text.main)
-    __arm_cp.1_19                            0x080005d8   Number         4  main.o(.text.main)
-    .text_divfast                            0x080005dc   Section      502  aeabi_sdivfast.o(.text_divfast)
-    voice_ENGINE2                            0x080007d2   Data         527  main.o(.rodata.voice_ENGINE2)
-    [Anonymous Symbol]                       0x080007d2   Section        0  main.o(.rodata.voice_ENGINE2)
+    [Anonymous Symbol]                       0x080002ec   Section        0  main.o(.text.main)
+    __arm_cp.1_0                             0x080005f0   Number         4  main.o(.text.main)
+    __arm_cp.1_1                             0x080005f4   Number         4  main.o(.text.main)
+    __arm_cp.1_2                             0x080005f8   Number         4  main.o(.text.main)
+    __arm_cp.1_3                             0x080005fc   Number         4  main.o(.text.main)
+    __arm_cp.1_4                             0x08000600   Number         4  main.o(.text.main)
+    __arm_cp.1_5                             0x08000604   Number         4  main.o(.text.main)
+    __arm_cp.1_6                             0x08000608   Number         4  main.o(.text.main)
+    __arm_cp.1_7                             0x0800060c   Number         4  main.o(.text.main)
+    __arm_cp.1_8                             0x08000610   Number         4  main.o(.text.main)
+    __arm_cp.1_9                             0x08000614   Number         4  main.o(.text.main)
+    __arm_cp.1_10                            0x08000618   Number         4  main.o(.text.main)
+    __arm_cp.1_11                            0x0800061c   Number         4  main.o(.text.main)
+    __arm_cp.1_12                            0x08000620   Number         4  main.o(.text.main)
+    __arm_cp.1_13                            0x08000624   Number         4  main.o(.text.main)
+    __arm_cp.1_14                            0x08000628   Number         4  main.o(.text.main)
+    __arm_cp.1_15                            0x0800062c   Number         4  main.o(.text.main)
+    __arm_cp.1_16                            0x08000630   Number         4  main.o(.text.main)
+    __arm_cp.1_17                            0x08000634   Number         4  main.o(.text.main)
+    __arm_cp.1_18                            0x08000638   Number         4  main.o(.text.main)
+    __arm_cp.1_19                            0x0800063c   Number         4  main.o(.text.main)
+    .text_divfast                            0x08000640   Section      502  aeabi_sdivfast.o(.text_divfast)
+    voice_ENGINE2                            0x08000836   Data         527  main.o(.rodata.voice_ENGINE2)
+    [Anonymous Symbol]                       0x08000836   Section        0  main.o(.rodata.voice_ENGINE2)
     smp                                      0x20000000   Data           2  main.o(.data.smp)
     [Anonymous Symbol]                       0x20000000   Section        0  main.o(.data.smp)
     .bss                                     0x20000008   Section       96  libspace.o(.bss)
@@ -467,12 +466,12 @@ Image Symbol Table
     EXTI2_3_IRQHandler                       0x08000221   Thumb Code     8  main.o(.text.EXTI2_3_IRQHandler)
     EXTI4_15_IRQHandler                      0x08000229   Thumb Code     8  main.o(.text.EXTI4_15_IRQHandler)
     SystemInit                               0x08000239   Thumb Code   116  main.o(.text.SystemInit)
-    TIM1_BRK_UP_TRG_COM_IRQHandler           0x080002b5   Thumb Code    40  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
-    main                                     0x080002e1   Thumb Code   684  main.o(.text.main)
-    __aeabi_uidiv                            0x080005dd   Thumb Code    68  aeabi_sdivfast.o(.text_divfast)
-    __aeabi_idiv                             0x08000621   Thumb Code   434  aeabi_sdivfast.o(.text_divfast)
-    Region$$Table$$Base                      0x080009e4   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08000a04   Number         0  anon$$obj.o(Region$$Table)
+    TIM1_BRK_UP_TRG_COM_IRQHandler           0x080002b5   Thumb Code    56  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
+    main                                     0x080002ed   Thumb Code   772  main.o(.text.main)
+    __aeabi_uidiv                            0x08000641   Thumb Code    68  aeabi_sdivfast.o(.text_divfast)
+    __aeabi_idiv                             0x08000685   Thumb Code   434  aeabi_sdivfast.o(.text_divfast)
+    Region$$Table$$Base                      0x08000a48   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08000a68   Number         0  anon$$obj.o(Region$$Table)
     __libspace_start                         0x20000008   Data          96  libspace.o(.bss)
     __temporary_stack_top$libspace           0x20000068   Data           0  libspace.o(.bss)
 
@@ -484,9 +483,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000b5
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00000a10, Max: 0x00004000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00000a70, Max: 0x00004000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00000a04, Max: 0x00004000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00000a68, Max: 0x00004000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -554,23 +553,23 @@ Memory Map of the image
     0x08000220   0x08000220   0x00000008   Code   RO           19    .text.EXTI2_3_IRQHandler  main.o
     0x08000228   0x08000228   0x00000010   Code   RO           21    .text.EXTI4_15_IRQHandler  main.o
     0x08000238   0x08000238   0x0000007c   Code   RO           11    .text.SystemInit    main.o
-    0x080002b4   0x080002b4   0x0000002c   Code   RO           15    .text.TIM1_BRK_UP_TRG_COM_IRQHandler  main.o
-    0x080002e0   0x080002e0   0x000002fc   Code   RO           13    .text.main          main.o
-    0x080005dc   0x080005dc   0x000001f6   Code   RO           37    .text_divfast       c_p.l(aeabi_sdivfast.o)
-    0x080007d2   0x080007d2   0x0000020f   Data   RO           24    .rodata.voice_ENGINE2  main.o
-    0x080009e1   0x080009e1   0x00000003   PAD
-    0x080009e4   0x080009e4   0x00000020   Data   RO          222    Region$$Table       anon$$obj.o
+    0x080002b4   0x080002b4   0x00000038   Code   RO           15    .text.TIM1_BRK_UP_TRG_COM_IRQHandler  main.o
+    0x080002ec   0x080002ec   0x00000354   Code   RO           13    .text.main          main.o
+    0x08000640   0x08000640   0x000001f6   Code   RO           37    .text_divfast       c_p.l(aeabi_sdivfast.o)
+    0x08000836   0x08000836   0x0000020f   Data   RO           24    .rodata.voice_ENGINE2  main.o
+    0x08000a45   0x08000a45   0x00000003   PAD
+    0x08000a48   0x08000a48   0x00000020   Data   RO          222    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08000a08, Size: 0x000006e8, Max: 0x00001000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08000a68, Size: 0x000006e8, Max: 0x00001000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08000a08   0x00000002   Data   RW           23    .data.smp           main.o
-    0x20000002   0x08000a0a   0x00000006   PAD
+    0x20000000   0x08000a68   0x00000002   Data   RW           23    .data.smp           main.o
+    0x20000002   0x08000a6a   0x00000006   PAD
     0x20000008        -       0x00000060   Zero   RW           86    .bss                c_p.l(libspace.o)
     0x20000068        -       0x0000007c   Zero   RW           26    .bss..L_MergedGlobals  main.o
-    0x200000e4   0x08000a0a   0x00000004   PAD
+    0x200000e4   0x08000a6a   0x00000004   PAD
     0x200000e8        -       0x00000200   Zero   RW            2    HEAP                startup_stm32f030.o
     0x200002e8        -       0x00000400   Zero   RW            1    STACK               startup_stm32f030.o
 
@@ -582,11 +581,11 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       964        100        527          2        124       6739   main.o
+      1064         96        527          2        124       6838   main.o
         56         26        180          0       1536        616   startup_stm32f030.o
 
     ----------------------------------------------------------------------
-      1020        126        742          4       1668       7355   Object Totals
+      1120        122        742          4       1668       7454   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          0          0          3          2          8          0   (incl. Padding)
 
@@ -636,15 +635,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      1822        144        742          4       1764       7919   Grand Totals
-      1822        144        742          4       1764       7919   ELF Image Totals
-      1822        144        742          4          0          0   ROM Totals
+      1922        140        742          4       1764       8018   Grand Totals
+      1922        140        742          4       1764       8018   ELF Image Totals
+      1922        140        742          4          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 2564 (   2.50kB)
+    Total RO  Size (Code + RO Data)                 2664 (   2.60kB)
     Total RW  Size (RW Data + ZI Data)              1768 (   1.73kB)
-    Total ROM Size (Code + RO Data + RW Data)       2568 (   2.51kB)
+    Total ROM Size (Code + RO Data + RW Data)       2668 (   2.61kB)
 
 ==============================================================================
 

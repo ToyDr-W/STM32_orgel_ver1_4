@@ -29,6 +29,8 @@ call make_cnf.bat	VOICES0_VOL	100	//音声S0のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	VOICES1_VOL	100	//音声S1のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	VOICES2_VOL	100	//音声S2のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	ORGEL_VOL	100	//ｵﾙｺﾞｰﾙ演奏のﾎﾞﾘｭｰﾑ配分[%]
+call make_cnf.bat	KB0_VOL		100	//KB0演奏のﾎﾞﾘｭｰﾑ配分[%]
+call make_cnf.bat	KB1_VOL		100	//KB1演奏のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	VOICE_N		1	//音声N発声数の最大値(最大値3､
 rem						//　0のときは音声再生機能を実装しない)
 call make_cnf.bat	VOICE_I		0	//音声I発声数の最大値(最大値1､
