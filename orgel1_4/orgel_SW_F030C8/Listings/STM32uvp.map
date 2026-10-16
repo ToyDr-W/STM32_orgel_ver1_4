@@ -21,23 +21,27 @@ Section Cross References
     main.o(.ARM.exidx.text.SystemInit) refers to main.o(.text.SystemInit) for [Anonymous Symbol]
     main.o(.text.main) refers to song_idx.o(.text) for song_idx_dmy
     main.o(.text.main) refers to main.o(.bss..L_MergedGlobals) for [Anonymous Symbol]
-    main.o(.text.main) refers to main.o(.bss..L_MergedGlobals.2) for [Anonymous Symbol]
+    main.o(.text.main) refers to main.o(.bss.buf) for [Anonymous Symbol]
     main.o(.text.main) refers to main.o(.bss.part) for [Anonymous Symbol]
     main.o(.text.main) refers to main.o(.rodata.onkou_mei_tbl) for [Anonymous Symbol]
-    main.o(.text.main) refers to rt_memclr.o(.text) for __aeabi_memclr4
     main.o(.text.main) refers to main.o(.rodata.onkou_tbl) for [Anonymous Symbol]
+    main.o(.text.main) refers to rt_memclr.o(.text) for __aeabi_memclr4
+    main.o(.text.main) refers to main.o(.text.song_init) for song_init
+    main.o(.text.main) refers to main.o(.rodata.voiceN_idx) for [Anonymous Symbol]
     main.o(.text.main) refers to main.o(.rodata.STEP_TABLE) for [Anonymous Symbol]
     main.o(.text.main) refers to main.o(.rodata.cst16) for [Anonymous Symbol]
-    main.o(.text.main) refers to main.o(.rodata.voiceN_idx) for [Anonymous Symbol]
-    main.o(.text.main) refers to main.o(.rodata.voiceI_idx) for [Anonymous Symbol]
-    main.o(.text.main) refers to main.o(.rodata.voiceS_idx) for [Anonymous Symbol]
     main.o(.ARM.exidx.text.main) refers to main.o(.text.main) for [Anonymous Symbol]
     main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler) refers to main.o(.bss..L_MergedGlobals) for [Anonymous Symbol]
-    main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler) refers to main.o(.bss..L_MergedGlobals.2) for [Anonymous Symbol]
+    main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler) refers to main.o(.bss.buf) for [Anonymous Symbol]
     main.o(.ARM.exidx.text.TIM1_BRK_UP_TRG_COM_IRQHandler) refers to main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler) for [Anonymous Symbol]
     main.o(.ARM.exidx.text.EXTI0_1_IRQHandler) refers to main.o(.text.EXTI0_1_IRQHandler) for [Anonymous Symbol]
     main.o(.ARM.exidx.text.EXTI2_3_IRQHandler) refers to main.o(.text.EXTI2_3_IRQHandler) for [Anonymous Symbol]
     main.o(.ARM.exidx.text.EXTI4_15_IRQHandler) refers to main.o(.text.EXTI4_15_IRQHandler) for [Anonymous Symbol]
+    main.o(.text.song_init) refers to rt_memclr.o(.text) for __aeabi_memclr4
+    main.o(.text.song_init) refers to main.o(.bss..L_MergedGlobals) for [Anonymous Symbol]
+    main.o(.text.song_init) refers to main.o(.bss.part) for [Anonymous Symbol]
+    main.o(.text.song_init) refers to song_idx.o(.text) for SONG_IDX
+    main.o(.ARM.exidx.text.song_init) refers to main.o(.text.song_init) for [Anonymous Symbol]
     main.o(.rodata.voiceN_idx) refers to main.o(.rodata.voice_WAN) for [Anonymous Symbol]
     main.o(.rodata.voiceN_idx) refers to main.o(.rodata.voice_DAME) for [Anonymous Symbol]
     main.o(.rodata.voiceN_idx) refers to main.o(.rodata.voice_CHIKO) for [Anonymous Symbol]
@@ -160,9 +164,10 @@ Removing Unused input sections from the image.
     Removing main.o(.ARM.exidx.text.EXTI0_1_IRQHandler), (8 bytes).
     Removing main.o(.ARM.exidx.text.EXTI2_3_IRQHandler), (8 bytes).
     Removing main.o(.ARM.exidx.text.EXTI4_15_IRQHandler), (8 bytes).
+    Removing main.o(.ARM.exidx.text.song_init), (8 bytes).
     Removing main.o(.ARM.use_no_argv), (4 bytes).
 
-8 unused section(s) (total 52 bytes) removed from the image.
+9 unused section(s) (total 60 bytes) removed from the image.
 
 ==============================================================================
 
@@ -308,127 +313,94 @@ Image Symbol Table
     __arm_cp.0_0                             0x080010b0   Number         4  main.o(.text.SystemInit)
     __arm_cp.0_1                             0x080010b4   Number         4  main.o(.text.SystemInit)
     [Anonymous Symbol]                       0x080010b8   Section        0  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
-    __arm_cp.2_0                             0x080010f0   Number         4  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
-    __arm_cp.2_1                             0x080010f4   Number         4  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
-    __arm_cp.2_2                             0x080010f8   Number         4  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
-    [Anonymous Symbol]                       0x080010fc   Section        0  main.o(.text.main)
-    __arm_cp.1_41                            0x080012fc   Number         4  main.o(.text.main)
-    __arm_cp.1_42                            0x08001300   Number         4  main.o(.text.main)
-    __arm_cp.1_43                            0x08001304   Number         4  main.o(.text.main)
-    __arm_cp.1_46                            0x08001310   Number         4  main.o(.text.main)
-    __arm_cp.1_47                            0x08001314   Number         4  main.o(.text.main)
-    __arm_cp.1_48                            0x08001318   Number         4  main.o(.text.main)
-    __arm_cp.1_118                           0x080017fc   Number         4  main.o(.text.main)
-    __arm_cp.1_61                            0x08001900   Number         4  main.o(.text.main)
-    __arm_cp.1_65                            0x08001910   Number         4  main.o(.text.main)
-    onka_tbl                                 0x08001918   Number         0  main.o(.text.main)
-    __arm_cp.1_69                            0x08001934   Number         4  main.o(.text.main)
-    __arm_cp.1_71                            0x08001d24   Number         4  main.o(.text.main)
-    __arm_cp.1_72                            0x08001d28   Number         4  main.o(.text.main)
-    port_tbl                                 0x08001d34   Number         0  main.o(.text.main)
-    __arm_cp.1_81                            0x08002150   Number         4  main.o(.text.main)
-    __arm_cp.1_82                            0x08002154   Number         4  main.o(.text.main)
-    __arm_cp.1_83                            0x08002158   Number         4  main.o(.text.main)
-    __arm_cp.1_84                            0x0800215c   Number         4  main.o(.text.main)
-    __arm_cp.1_85                            0x08002160   Number         4  main.o(.text.main)
-    __arm_cp.1_101                           0x08002878   Number         4  main.o(.text.main)
-    __arm_cp.1_102                           0x0800287c   Number         4  main.o(.text.main)
-    __arm_cp.1_103                           0x08002880   Number         4  main.o(.text.main)
-    __arm_cp.1_104                           0x08002884   Number         4  main.o(.text.main)
-    __arm_cp.1_105                           0x08002888   Number         4  main.o(.text.main)
-    __arm_cp.1_106                           0x08002b70   Number         4  main.o(.text.main)
-    sw_cnt                                   0x08002b70   Number         0  main.o(.text.main)
-    __arm_cp.1_107                           0x08002b74   Number         4  main.o(.text.main)
-    __arm_cp.1_108                           0x08002b78   Number         4  main.o(.text.main)
-    __arm_cp.1_109                           0x08002b7c   Number         4  main.o(.text.main)
-    __arm_cp.1_110                           0x08002b80   Number         4  main.o(.text.main)
-    __arm_cp.1_111                           0x08002b84   Number         4  main.o(.text.main)
-    __arm_cp.1_11                            0x08002d8c   Number         4  main.o(.text.main)
-    __arm_cp.1_15                            0x08002d90   Number         4  main.o(.text.main)
-    __arm_cp.1_20                            0x08002d94   Number         4  main.o(.text.main)
-    __arm_cp.1_22                            0x08002d98   Number         4  main.o(.text.main)
-    __arm_cp.1_27                            0x08002d9c   Number         4  main.o(.text.main)
-    __arm_cp.1_28                            0x08002da0   Number         4  main.o(.text.main)
-    __arm_cp.1_29                            0x08002da4   Number         4  main.o(.text.main)
-    __arm_cp.1_30                            0x08002da8   Number         4  main.o(.text.main)
-    __arm_cp.1_31                            0x08002dac   Number         4  main.o(.text.main)
-    STEP_TABLE                               0x08002db0   Data         178  main.o(.rodata.STEP_TABLE)
-    [Anonymous Symbol]                       0x08002db0   Section        0  main.o(.rodata.STEP_TABLE)
-    INDEX_TABLE                              0x08002e62   Data          16  main.o(.rodata.cst16)
-    [Anonymous Symbol]                       0x08002e62   Section        0  main.o(.rodata.cst16)
-    onkou_mei_tbl                            0x08002e72   Data          64  main.o(.rodata.onkou_mei_tbl)
-    [Anonymous Symbol]                       0x08002e72   Section        0  main.o(.rodata.onkou_mei_tbl)
-    onkou_tbl                                0x08002eb2   Data          24  main.o(.rodata.onkou_tbl)
-    [Anonymous Symbol]                       0x08002eb2   Section        0  main.o(.rodata.onkou_tbl)
-    voiceI_idx                               0x08002ecc   Data          36  main.o(.rodata.voiceI_idx)
-    [Anonymous Symbol]                       0x08002ecc   Section        0  main.o(.rodata.voiceI_idx)
-    voiceN_idx                               0x08002ef0   Data          36  main.o(.rodata.voiceN_idx)
-    [Anonymous Symbol]                       0x08002ef0   Section        0  main.o(.rodata.voiceN_idx)
-    voiceS_idx                               0x08002f14   Data          72  main.o(.rodata.voiceS_idx)
-    [Anonymous Symbol]                       0x08002f14   Section        0  main.o(.rodata.voiceS_idx)
-    voice_CHIKO                              0x08002f5c   Data        7433  main.o(.rodata.voice_CHIKO)
-    [Anonymous Symbol]                       0x08002f5c   Section        0  main.o(.rodata.voice_CHIKO)
-    voice_DAME                               0x08004c65   Data        1941  main.o(.rodata.voice_DAME)
-    [Anonymous Symbol]                       0x08004c65   Section        0  main.o(.rodata.voice_DAME)
-    voice_WAN                                0x080053fa   Data        2013  main.o(.rodata.voice_WAN)
-    [Anonymous Symbol]                       0x080053fa   Section        0  main.o(.rodata.voice_WAN)
+    __arm_cp.2_1                             0x080010ec   Number         4  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
+    __arm_cp.2_2                             0x080010f0   Number         4  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
+    [Anonymous Symbol]                       0x080010f4   Section        0  main.o(.text.main)
+    __arm_cp.1_32                            0x08001348   Number         4  main.o(.text.main)
+    __arm_cp.1_33                            0x0800134c   Number         4  main.o(.text.main)
+    __arm_cp.1_34                            0x08001350   Number         4  main.o(.text.main)
+    __arm_cp.1_37                            0x0800135c   Number         4  main.o(.text.main)
+    __arm_cp.1_38                            0x08001360   Number         4  main.o(.text.main)
+    __arm_cp.1_39                            0x08001364   Number         4  main.o(.text.main)
+    __arm_cp.1_40                            0x08001368   Number         4  main.o(.text.main)
+    __arm_cp.1_42                            0x08001370   Number         4  main.o(.text.main)
+    __arm_cp.1_46                            0x08001770   Number         4  main.o(.text.main)
+    __arm_cp.1_48                            0x08001778   Number         4  main.o(.text.main)
+    __arm_cp.1_49                            0x0800177c   Number         4  main.o(.text.main)
+    __arm_cp.1_50                            0x080018cc   Number         4  main.o(.text.main)
+    __arm_cp.1_51                            0x080018d0   Number         4  main.o(.text.main)
+    __arm_cp.1_52                            0x080018d4   Number         4  main.o(.text.main)
+    __arm_cp.1_53                            0x080018d8   Number         4  main.o(.text.main)
+    onka_tbl                                 0x080018e4   Number         0  main.o(.text.main)
+    __arm_cp.1_58                            0x08001900   Number         4  main.o(.text.main)
+    __arm_cp.1_61                            0x08001c80   Number         4  main.o(.text.main)
+    __arm_cp.1_62                            0x08001c84   Number         4  main.o(.text.main)
+    port_tbl                                 0x08001c88   Number         0  main.o(.text.main)
+    __arm_cp.1_13                            0x08002204   Number         4  main.o(.text.main)
+    __arm_cp.1_15                            0x08002208   Number         4  main.o(.text.main)
+    __arm_cp.1_18                            0x0800220c   Number         4  main.o(.text.main)
+    __arm_cp.1_19                            0x08002210   Number         4  main.o(.text.main)
+    __arm_cp.1_24                            0x08002214   Number         4  main.o(.text.main)
+    __arm_cp.1_25                            0x08002218   Number         4  main.o(.text.main)
+    __arm_cp.1_26                            0x0800221c   Number         4  main.o(.text.main)
+    __arm_cp.1_27                            0x08002220   Number         4  main.o(.text.main)
+    __arm_cp.1_28                            0x08002224   Number         4  main.o(.text.main)
+    song_init                                0x08002229   Thumb Code   248  main.o(.text.song_init)
+    [Anonymous Symbol]                       0x08002228   Section        0  main.o(.text.song_init)
+    __arm_cp.6_0                             0x08002320   Number         4  main.o(.text.song_init)
+    __arm_cp.6_1                             0x08002324   Number         4  main.o(.text.song_init)
+    __arm_cp.6_2                             0x08002328   Number         4  main.o(.text.song_init)
+    STEP_TABLE                               0x0800232c   Data         178  main.o(.rodata.STEP_TABLE)
+    [Anonymous Symbol]                       0x0800232c   Section        0  main.o(.rodata.STEP_TABLE)
+    INDEX_TABLE                              0x080023de   Data          16  main.o(.rodata.cst16)
+    [Anonymous Symbol]                       0x080023de   Section        0  main.o(.rodata.cst16)
+    onkou_mei_tbl                            0x080023ee   Data          64  main.o(.rodata.onkou_mei_tbl)
+    [Anonymous Symbol]                       0x080023ee   Section        0  main.o(.rodata.onkou_mei_tbl)
+    onkou_tbl                                0x0800242e   Data          24  main.o(.rodata.onkou_tbl)
+    [Anonymous Symbol]                       0x0800242e   Section        0  main.o(.rodata.onkou_tbl)
+    voiceN_idx                               0x08002448   Data          36  main.o(.rodata.voiceN_idx)
+    [Anonymous Symbol]                       0x08002448   Section        0  main.o(.rodata.voiceN_idx)
+    voice_CHIKO                              0x0800246c   Data        7433  main.o(.rodata.voice_CHIKO)
+    [Anonymous Symbol]                       0x0800246c   Section        0  main.o(.rodata.voice_CHIKO)
+    voice_DAME                               0x08004175   Data        1941  main.o(.rodata.voice_DAME)
+    [Anonymous Symbol]                       0x08004175   Section        0  main.o(.rodata.voice_DAME)
+    voice_WAN                                0x0800490a   Data        2013  main.o(.rodata.voice_WAN)
+    [Anonymous Symbol]                       0x0800490a   Section        0  main.o(.rodata.voice_WAN)
     .bss                                     0x20000000   Section       96  libspace.o(.bss)
     song.5                                   0x20000060   Data           1  main.o(.bss..L_MergedGlobals)
     [Anonymous Symbol]                       0x20000060   Section        0  main.o(.bss..L_MergedGlobals)
     song.6                                   0x20000064   Data           1  main.o(.bss..L_MergedGlobals)
     song.7                                   0x20000068   Data           1  main.o(.bss..L_MergedGlobals)
     voiceN.3                                 0x2000006c   Data           1  main.o(.bss..L_MergedGlobals)
-    voiceI.3                                 0x20000070   Data           1  main.o(.bss..L_MergedGlobals)
-    voiceS.3                                 0x20000074   Data           1  main.o(.bss..L_MergedGlobals)
-    buf_read                                 0x20000075   Data           1  main.o(.bss..L_MergedGlobals)
-    buf_write                                0x20000076   Data           1  main.o(.bss..L_MergedGlobals)
-    voiceN_exe.data                          0x20000077   Data           1  main.o(.bss..L_MergedGlobals)
-    voiceI_exe.data                          0x20000078   Data           1  main.o(.bss..L_MergedGlobals)
-    voiceS_exe.data                          0x20000079   Data           1  main.o(.bss..L_MergedGlobals)
-    spi_addr                                 0x2000007a   Data           1  main.o(.bss..L_MergedGlobals)
-    kyoku                                    0x2000007b   Data           1  main.o(.bss..L_MergedGlobals)
-    onseiN                                   0x2000007c   Data           1  main.o(.bss..L_MergedGlobals)
-    onseiI                                   0x2000007d   Data           1  main.o(.bss..L_MergedGlobals)
-    onseiS                                   0x2000007e   Data           1  main.o(.bss..L_MergedGlobals)
-    sw_hst.0                                 0x2000007f   Data           1  main.o(.bss..L_MergedGlobals)
-    sw_hst.1                                 0x20000080   Data           1  main.o(.bss..L_MergedGlobals)
-    kyotuu.0                                 0x20000084   Data           2  main.o(.bss..L_MergedGlobals)
-    song.1                                   0x20000088   Data           2  main.o(.bss..L_MergedGlobals)
-    song.2                                   0x2000008c   Data           2  main.o(.bss..L_MergedGlobals)
-    song.4                                   0x20000090   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceN.2                                 0x20000094   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceN.4                                 0x20000098   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceN.5                                 0x2000009c   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceN.6                                 0x200000a0   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceN.7                                 0x200000a4   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceI.2                                 0x200000a8   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceI.4                                 0x200000ac   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceI.5                                 0x200000b0   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceI.7                                 0x200000b4   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceI.8                                 0x200000b8   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceS.2                                 0x200000bc   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceS.4                                 0x200000c0   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceS.5                                 0x200000c4   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceS.6                                 0x200000c8   Data           2  main.o(.bss..L_MergedGlobals)
-    voiceS.7                                 0x200000cc   Data           2  main.o(.bss..L_MergedGlobals)
-    CB_KOYUU.sleep_tmr                       0x200000ce   Data           2  main.o(.bss..L_MergedGlobals)
-    kyotuu.1                                 0x200000d0   Data           4  main.o(.bss..L_MergedGlobals)
-    song.0                                   0x200000d4   Data           4  main.o(.bss..L_MergedGlobals)
-    voiceN.0                                 0x200000d8   Data           4  main.o(.bss..L_MergedGlobals)
-    voiceN.1                                 0x200000dc   Data           4  main.o(.bss..L_MergedGlobals.2)
-    [Anonymous Symbol]                       0x200000dc   Section        0  main.o(.bss..L_MergedGlobals.2)
-    voiceI.0                                 0x200000e0   Data           4  main.o(.bss..L_MergedGlobals.2)
-    voiceI.1                                 0x200000e4   Data           4  main.o(.bss..L_MergedGlobals.2)
-    voiceS.0                                 0x200000e8   Data           4  main.o(.bss..L_MergedGlobals.2)
-    voiceS.1                                 0x200000ec   Data           4  main.o(.bss..L_MergedGlobals.2)
-    buf                                      0x200000f0   Data         100  main.o(.bss..L_MergedGlobals.2)
-    part                                     0x20000154   Data         256  main.o(.bss.part)
-    [Anonymous Symbol]                       0x20000154   Section        0  main.o(.bss.part)
-    Heap_Mem                                 0x20000258   Data         512  startup_stm32f030.o(HEAP)
-    HEAP                                     0x20000258   Section      512  startup_stm32f030.o(HEAP)
-    Stack_Mem                                0x20000458   Data        1024  startup_stm32f030.o(STACK)
-    STACK                                    0x20000458   Section     1024  startup_stm32f030.o(STACK)
-    __initial_sp                             0x20000858   Data           0  startup_stm32f030.o(STACK)
+    buf_read                                 0x2000006d   Data           1  main.o(.bss..L_MergedGlobals)
+    buf_write                                0x2000006e   Data           1  main.o(.bss..L_MergedGlobals)
+    voiceN_exe.data                          0x2000006f   Data           1  main.o(.bss..L_MergedGlobals)
+    kyoku                                    0x20000070   Data           1  main.o(.bss..L_MergedGlobals)
+    onseiN                                   0x20000071   Data           1  main.o(.bss..L_MergedGlobals)
+    sw_hst.0                                 0x20000072   Data           1  main.o(.bss..L_MergedGlobals)
+    sw_hst.1                                 0x20000073   Data           1  main.o(.bss..L_MergedGlobals)
+    kyotuu.0                                 0x20000074   Data           2  main.o(.bss..L_MergedGlobals)
+    song.1                                   0x20000078   Data           2  main.o(.bss..L_MergedGlobals)
+    song.2                                   0x2000007c   Data           2  main.o(.bss..L_MergedGlobals)
+    song.4                                   0x20000080   Data           2  main.o(.bss..L_MergedGlobals)
+    voiceN.2                                 0x20000084   Data           2  main.o(.bss..L_MergedGlobals)
+    voiceN.4                                 0x20000088   Data           2  main.o(.bss..L_MergedGlobals)
+    voiceN.5                                 0x2000008c   Data           2  main.o(.bss..L_MergedGlobals)
+    voiceN.6                                 0x20000090   Data           2  main.o(.bss..L_MergedGlobals)
+    voiceN.7                                 0x20000094   Data           2  main.o(.bss..L_MergedGlobals)
+    CB_KOYUU.sleep_tmr                       0x20000096   Data           2  main.o(.bss..L_MergedGlobals)
+    song.0                                   0x20000098   Data           4  main.o(.bss..L_MergedGlobals)
+    voiceN.0                                 0x2000009c   Data           4  main.o(.bss..L_MergedGlobals)
+    voiceN.1                                 0x200000a0   Data           4  main.o(.bss..L_MergedGlobals)
+    buf                                      0x200000a4   Data         100  main.o(.bss.buf)
+    [Anonymous Symbol]                       0x200000a4   Section        0  main.o(.bss.buf)
+    part                                     0x20000108   Data         256  main.o(.bss.part)
+    [Anonymous Symbol]                       0x20000108   Section        0  main.o(.bss.part)
+    Heap_Mem                                 0x20000208   Data         512  startup_stm32f030.o(HEAP)
+    HEAP                                     0x20000208   Section      512  startup_stm32f030.o(HEAP)
+    Stack_Mem                                0x20000408   Data        1024  startup_stm32f030.o(STACK)
+    STACK                                    0x20000408   Section     1024  startup_stm32f030.o(STACK)
+    __initial_sp                             0x20000808   Data           0  startup_stm32f030.o(STACK)
 
     Global Symbols
 
@@ -576,10 +548,10 @@ Image Symbol Table
     EXTI2_3_IRQHandler                       0x08001025   Thumb Code     8  main.o(.text.EXTI2_3_IRQHandler)
     EXTI4_15_IRQHandler                      0x0800102d   Thumb Code     8  main.o(.text.EXTI4_15_IRQHandler)
     SystemInit                               0x0800103d   Thumb Code   116  main.o(.text.SystemInit)
-    TIM1_BRK_UP_TRG_COM_IRQHandler           0x080010b9   Thumb Code    56  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
-    main                                     0x080010fd   Thumb Code  7312  main.o(.text.main)
-    Region$$Table$$Base                      0x08005bd8   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08005be8   Number         0  anon$$obj.o(Region$$Table)
+    TIM1_BRK_UP_TRG_COM_IRQHandler           0x080010b9   Thumb Code    52  main.o(.text.TIM1_BRK_UP_TRG_COM_IRQHandler)
+    main                                     0x080010f5   Thumb Code  4368  main.o(.text.main)
+    Region$$Table$$Base                      0x080050e8   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x080050f8   Number         0  anon$$obj.o(Region$$Table)
     __libspace_start                         0x20000000   Data          96  libspace.o(.bss)
     __temporary_stack_top$libspace           0x20000060   Data           0  libspace.o(.bss)
 
@@ -591,9 +563,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000b5
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00005be8, Max: 0x00010000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000050f8, Max: 0x00010000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00005be8, Max: 0x00010000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000050f8, Max: 0x00010000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -661,34 +633,32 @@ Memory Map of the image
     0x08001024   0x08001024   0x00000008   Code   RO           22    .text.EXTI2_3_IRQHandler  main.o
     0x0800102c   0x0800102c   0x00000010   Code   RO           24    .text.EXTI4_15_IRQHandler  main.o
     0x0800103c   0x0800103c   0x0000007c   Code   RO           14    .text.SystemInit    main.o
-    0x080010b8   0x080010b8   0x00000044   Code   RO           18    .text.TIM1_BRK_UP_TRG_COM_IRQHandler  main.o
-    0x080010fc   0x080010fc   0x00001cb4   Code   RO           16    .text.main          main.o
-    0x08002db0   0x08002db0   0x000000b2   Data   RO           29    .rodata.STEP_TABLE  main.o
-    0x08002e62   0x08002e62   0x00000010   Data   RO           30    .rodata.cst16       main.o
-    0x08002e72   0x08002e72   0x00000040   Data   RO           27    .rodata.onkou_mei_tbl  main.o
-    0x08002eb2   0x08002eb2   0x00000018   Data   RO           28    .rodata.onkou_tbl   main.o
-    0x08002eca   0x08002eca   0x00000002   PAD
-    0x08002ecc   0x08002ecc   0x00000024   Data   RO           35    .rodata.voiceI_idx  main.o
-    0x08002ef0   0x08002ef0   0x00000024   Data   RO           31    .rodata.voiceN_idx  main.o
-    0x08002f14   0x08002f14   0x00000048   Data   RO           36    .rodata.voiceS_idx  main.o
-    0x08002f5c   0x08002f5c   0x00001d09   Data   RO           34    .rodata.voice_CHIKO  main.o
-    0x08004c65   0x08004c65   0x00000795   Data   RO           33    .rodata.voice_DAME  main.o
-    0x080053fa   0x080053fa   0x000007dd   Data   RO           32    .rodata.voice_WAN   main.o
-    0x08005bd7   0x08005bd7   0x00000001   PAD
-    0x08005bd8   0x08005bd8   0x00000010   Data   RO          219    Region$$Table       anon$$obj.o
+    0x080010b8   0x080010b8   0x0000003c   Code   RO           18    .text.TIM1_BRK_UP_TRG_COM_IRQHandler  main.o
+    0x080010f4   0x080010f4   0x00001134   Code   RO           16    .text.main          main.o
+    0x08002228   0x08002228   0x00000104   Code   RO           26    .text.song_init     main.o
+    0x0800232c   0x0800232c   0x000000b2   Data   RO           32    .rodata.STEP_TABLE  main.o
+    0x080023de   0x080023de   0x00000010   Data   RO           33    .rodata.cst16       main.o
+    0x080023ee   0x080023ee   0x00000040   Data   RO           30    .rodata.onkou_mei_tbl  main.o
+    0x0800242e   0x0800242e   0x00000018   Data   RO           31    .rodata.onkou_tbl   main.o
+    0x08002446   0x08002446   0x00000002   PAD
+    0x08002448   0x08002448   0x00000024   Data   RO           34    .rodata.voiceN_idx  main.o
+    0x0800246c   0x0800246c   0x00001d09   Data   RO           37    .rodata.voice_CHIKO  main.o
+    0x08004175   0x08004175   0x00000795   Data   RO           36    .rodata.voice_DAME  main.o
+    0x0800490a   0x0800490a   0x000007dd   Data   RO           35    .rodata.voice_WAN   main.o
+    0x080050e7   0x080050e7   0x00000001   PAD
+    0x080050e8   0x080050e8   0x00000010   Data   RO          219    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08005be8, Size: 0x00000858, Max: 0x00002000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x080050f8, Size: 0x00000808, Max: 0x00002000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x20000000        -       0x00000060   Zero   RW           83    .bss                c_p.l(libspace.o)
-    0x20000060        -       0x0000007c   Zero   RW           38    .bss..L_MergedGlobals  main.o
-    0x200000dc        -       0x00000078   Zero   RW           39    .bss..L_MergedGlobals.2  main.o
-    0x20000154        -       0x00000100   Zero   RW           26    .bss.part           main.o
-    0x20000254   0x08005be8   0x00000004   PAD
-    0x20000258        -       0x00000200   Zero   RW            7    HEAP                startup_stm32f030.o
-    0x20000458        -       0x00000400   Zero   RW            6    STACK               startup_stm32f030.o
+    0x20000060        -       0x00000044   Zero   RW           39    .bss..L_MergedGlobals  main.o
+    0x200000a4        -       0x00000064   Zero   RW           28    .bss.buf            main.o
+    0x20000108        -       0x00000100   Zero   RW           29    .bss.part           main.o
+    0x20000208        -       0x00000200   Zero   RW            7    HEAP                startup_stm32f030.o
+    0x20000408        -       0x00000400   Zero   RW            6    STACK               startup_stm32f030.o
 
 
 ==============================================================================
@@ -698,14 +668,14 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-      7572        416      11813          0        500      23048   main.o
-      3552       3550          0          0          0        240   song_idx.o
-        56         26        180          0       1536        576   startup_stm32f030.o
+      4880        264      11705          0        424      17061   main.o
+      3552       3550          0          0          0        244   song_idx.o
+        56         26        180          0       1536        580   startup_stm32f030.o
 
     ----------------------------------------------------------------------
-     11180       3992      12012          0       2040      23864   Object Totals
+      8488       3840      11904          0       1960      17885   Object Totals
          0          0         16          0          0          0   (incl. Generated)
-         0          0          3          0          4          0   (incl. Padding)
+         0          0          3          0          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -752,15 +722,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     11516       4010      12012          0       2136      24384   Grand Totals
-     11516       4010      12012          0       2136      24384   ELF Image Totals
-     11516       4010      12012          0          0          0   ROM Totals
+      8824       3858      11904          0       2056      18405   Grand Totals
+      8824       3858      11904          0       2056      18405   ELF Image Totals
+      8824       3858      11904          0          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                23528 (  22.98kB)
-    Total RW  Size (RW Data + ZI Data)              2136 (   2.09kB)
-    Total ROM Size (Code + RO Data + RW Data)      23528 (  22.98kB)
+    Total RO  Size (Code + RO Data)                20728 (  20.24kB)
+    Total RW  Size (RW Data + ZI Data)              2056 (   2.01kB)
+    Total ROM Size (Code + RO Data + RW Data)      20728 (  20.24kB)
 
 ==============================================================================
 
