@@ -25,6 +25,18 @@
 
 ---
 
+## 🔄 改訂履歴 (Change Log)
+
+<details>
+<summary>クリックして詳細を展開 / Click to view details</summary>
+
+### 📄 本リポジトリの更新情報
+- **2026/10/14**: v1.0.0 （GitHub開始時、安定版）
+
+</details>
+
+---
+
 ### ⚠️ 注意事項 (Notice)
 
 1. **Issue・Pull Requestについて:** アーカイブ目的のため、コードの修正提案やPull Requestは受け付けておりません。
