@@ -1,6 +1,3 @@
-#define	I2Cx	I2C1
-
-
 #ifdef I2C_SOFT				//I2Cをｿﾌﾄ実装するとき
 #include "dev_I2C_SOFT.c"			//ｿﾌﾄ実装ｺｰﾄﾞを呼込む
 

@@ -18,6 +18,16 @@
 
 
 //==============================================
+//ISP用のSYSCLK設定
+//==============================================
+#ifdef ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#undef SYS_CLK					//SYS_CLKを
+						//　64MHzに強制する
+#define	SYS_CLK	64
+#endif
+
+
+//==============================================
 //ｼｽﾃﾑｸﾛｯｸ設定
 //==============================================
 void SystemInit (void)
@@ -48,17 +58,24 @@ void SystemInit (void)
 //==============================================
 #include "common.c"				//共通ｺｰﾄﾞを呼込む
 
-#if VOICE_I>0				//音声Iを使うとき
-#include "dev_I2C_F030.c"			//I2Cを呼込む(F030用を共用)
-#endif
+#ifdef ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#undef UARTBPS					//UARTのﾎﾞｰﾚｰﾄを
+#define	UARTBPS	230400				//　230400bpsに強制する
+#include "dev_UART.c"				//UARTを呼込む
+#undef	VOICE_S					//SPI音声を
+#define	VOICE_S	1				//　使用する設定にする
+#include "dev_SPI.c"				//SPIを呼込む
 
+#else					//電子ｵﾙｺﾞｰﾙを実行するとき
+#if VOICE_I>0				//音声Iを使うとき
+#include "dev_I2C_F030.c"			//I2Cを呼込む
+#endif
 #if VOICE_C+VOICE_S>0			//音声Cか音声Sを使うとき
 #include "dev_SPI.c"				//SPIを呼込む
 #endif
-
 #include "orgel.c"				//orgelｴﾝｼﾞﾝを呼込む
-
 #include "dev_PWM_G03x_8.c"			//PWMを呼込む
+#endif
 
 
 //==============================================
@@ -66,6 +83,9 @@ void SystemInit (void)
 //==============================================
 static void CB_INIT(void)
 {
+
+	//ﾀﾞｳﾝﾛｰﾄﾞ猶予時間
+	wait_ms(1000);				//絶対に取るな!
 
 	//低電力設定
 	RCC->APBENR1|=RCC_APBENR1_PWREN;	//電源ｲﾝﾀﾌｪｰｽにｸﾛｯｸ供給
@@ -113,17 +133,18 @@ static void CB_INIT(void)
 //DBG_C('\n');
 //DBG_C('i');
 
-	//I2Cﾎﾟｰﾄ設定
+	//PWMﾎﾟｰﾄ設定/UARTﾎﾟｰﾄ設定
+#ifdef	ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+	uart_init();				//UART初期設定
+	spi_init();				//SPI初期設定
+
+#else					//電子ｵﾙｺﾞｰﾙを実行するとき
 #if VOICE_I>0
 	i2c_init();				//I2C初期設定
 #endif
-
-	//SPIﾎﾟｰﾄ設定
 #if VOICE_C+VOICE_S>0
 	spi_init();				//SPI初期設定
 #endif
-
-	//PWM設定
 	pwm_init();				//PWM初期設定
 
 	//ADCの実装要否
@@ -145,6 +166,7 @@ static void CB_INIT(void)
 //	ADC1->CR|=ADC_CR_ADCAL;			//ｷｬﾘﾌﾞﾚｰﾄ開始
 //	while(ADC1->CR&ADC_CR_ADCAL);		//ｷｬﾘﾌﾞﾚｰﾄ終了を待つ
 //DBG_C('a');
+#endif
 #endif
 
 	//ｱﾌﾟﾘの初期設定(LED設定はｱﾌﾟﾘの初期化で実施)
