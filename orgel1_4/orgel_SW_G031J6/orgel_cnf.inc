@@ -1,6 +1,6 @@
-SYS_CLK equ 96 
+SYS_CLK equ 64 
 BTL equ 0 
-PWM_STEP equ 2048 
+PWM_STEP equ 1024 
 PWM_FRQ equ (SYS_CLK*1000/PWM_STEP) 
 PWM_PR equ (PWM_STEP/SYS_CLK) 
 PWM_DB_CMP equ 10 
@@ -18,10 +18,12 @@ VOICES0_VOL equ 100
 VOICES1_VOL equ 100 
 VOICES2_VOL equ 100 
 ORGEL_VOL equ 100 
+KB0_VOL equ 100 
+KB1_VOL equ 100 
 VOICE_N equ 1 
 VOICE_I equ 0 
 VOICE_C equ 0 
 VOICE_S equ 0 
-PART_N equ 1 
+PART_N equ 4 
 KB_N equ 0 
  end 

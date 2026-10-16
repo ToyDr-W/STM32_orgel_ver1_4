@@ -1,6 +1,6 @@
-#define SYS_CLK 96 
+#define SYS_CLK 64 
 #define BTL 0 
-#define PWM_STEP 2048 
+#define PWM_STEP 1024 
 #define PWM_FRQ (SYS_CLK*1000/PWM_STEP) 
 #define PWM_PR (PWM_STEP/SYS_CLK) 
 #define PWM_DB_CMP 10 
@@ -18,9 +18,11 @@
 #define VOICES1_VOL 100 
 #define VOICES2_VOL 100 
 #define ORGEL_VOL 100 
+#define KB0_VOL 100 
+#define KB1_VOL 100 
 #define VOICE_N 1 
 #define VOICE_I 0 
 #define VOICE_C 0 
 #define VOICE_S 0 
-#define PART_N 1 
+#define PART_N 4 
 #define KB_N 0 

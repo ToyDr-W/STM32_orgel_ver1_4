@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\Objects\STM32uvp.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\STM32uvp.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Sat Sep 19 13:47:19 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Sun Oct  4 18:45:58 2026
 <BR><P>
-<H3>Maximum Stack Usage =         88 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        120 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main
 <P>
@@ -169,7 +169,7 @@ Global Symbols
 <P><STRONG><a name="[4e]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[21]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 120 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main
 </UL>
 <BR>[Calls]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
@@ -343,8 +343,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32l010x4.o(RESET)
 </UL>
-<P><STRONG><a name="[22]"></a>main</STRONG> (Thumb, 2152 bytes, Stack size 88 bytes, main.o(.text.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = main
+<P><STRONG><a name="[22]"></a>main</STRONG> (Thumb, 3180 bytes, Stack size 120 bytes, main.o(.text.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = main
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>

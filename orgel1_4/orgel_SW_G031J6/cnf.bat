@@ -4,15 +4,15 @@ del orgel_cnf.inc
 rem//==============================================
 rem//構成情報(ｵﾙｺﾞｰﾙ演奏+音声再生処理に関わるもの)
 rem//==============================================
-call make_cnf.bat	SYS_CLK 	96	//ｼｽﾃﾑｸﾛｯｸ周波数[MHz](64=公証値､96=ｸﾛｯｸｱｯﾌﾟ)
+call make_cnf.bat	SYS_CLK 	64	//ｼｽﾃﾑｸﾛｯｸ周波数[MHz](64=公証値､96=ｸﾛｯｸｱｯﾌﾟ)
 call make_cnf.bat	BTL 		0	//BTL出力指定
 rem						//　0=ｼﾝｸﾞﾙ出力
 rem						//　1=ｺﾝﾌﾟﾘ出力
 rem						//　2=ﾌﾞﾘｯｼﾞ出力
 rem						//　3=ﾌﾞﾚｰｷ出力
-call make_cnf.bat	PWM_STEP	2048
-call make_cnf.bat	PWM_FRQ		(SYS_CLK*1000/PWM_STEP)	//PWM周波数=46.9[kHz]
-call make_cnf.bat	PWM_PR		(PWM_STEP/SYS_CLK)	//PWM周期=21.3[us]
+call make_cnf.bat	PWM_STEP	1024
+call make_cnf.bat	PWM_FRQ		(SYS_CLK*1000/PWM_STEP)	//PWM周波数=62.5[kHz]
+call make_cnf.bat	PWM_PR		(PWM_STEP/SYS_CLK)	//PWM周期=16[us]
 call make_cnf.bat	PWM_DB_CMP	10	//PWMﾃﾞｯﾄﾞﾊﾞﾝﾄﾞ(ｺﾝﾌﾟﾘ出力時)[PWMｽﾃｯﾌﾟ時間]
 call make_cnf.bat	PWM_DB_BRG	10	//PWMﾃﾞｯﾄﾞﾊﾞﾝﾄﾞ(ﾌﾞﾘｯｼﾞ出力時)[PWMｽﾃｯﾌﾟ時間]
 call make_cnf.bat	OUT_BUF_N	50	//出力ﾊﾞｯﾌｧｻｲｽﾞ
@@ -29,6 +29,8 @@ call make_cnf.bat	VOICES0_VOL	100	//音声S0のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	VOICES1_VOL	100	//音声S1のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	VOICES2_VOL	100	//音声S2のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	ORGEL_VOL	100	//ｵﾙｺﾞｰﾙ演奏のﾎﾞﾘｭｰﾑ配分[%]
+call make_cnf.bat	KB0_VOL		100	//KB0演奏のﾎﾞﾘｭｰﾑ配分[%]
+call make_cnf.bat	KB1_VOL		100	//KB1演奏のﾎﾞﾘｭｰﾑ配分[%]
 call make_cnf.bat	VOICE_N		1	//音声N発声数の最大値(最大値3､
 rem						//　0のときは音声再生機能を実装しない)
 call make_cnf.bat	VOICE_I		0	//音声I発声数の最大値(最大値1､
@@ -37,7 +39,7 @@ call make_cnf.bat	VOICE_C		0	//音声C発声数の最大値(最大値1､
 rem						//　0のときは音声再生機能を実装しない)
 call make_cnf.bat	VOICE_S		0	//音声S発声数の最大値(
 rem						//　0のときは音声再生機能を実装しない)
-call make_cnf.bat	PART_N		1	//演奏ﾊﾟｰﾄ数の最大値(最大値4､
+call make_cnf.bat	PART_N		4	//演奏ﾊﾟｰﾄ数の最大値(最大値4､
 rem						//　0のときはｵﾙｺﾞｰﾙ演奏機能を
 rem						//　実装しない)
 call make_cnf.bat	KB_N		0	//KB演奏有効ﾊﾟｰﾄ数の最大値

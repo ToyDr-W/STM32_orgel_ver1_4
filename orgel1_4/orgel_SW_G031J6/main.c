@@ -1,7 +1,7 @@
 //#define	SHDBS		//ﾃﾞﾊﾞｸﾞ信号を出力するときに宣言する
 //#define	SHDBG		//ﾃﾞﾊﾞｸﾞ情報を出力するときに宣言する
 //#define	SHBPS	115200	//ﾃﾞﾊﾞｸﾞ情報のﾎﾞｰﾚｰﾄを宣言する(ﾃﾞﾌｫﾙﾄ値は38400bps)
-#define		SHDBG_SOFT	//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装するときに宣言する		
+//#define		SHDBG_SOFT	//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装するときに宣言する		
 //#define	SHDBG_IN	//ﾃﾞﾊﾞｸﾞ情報を入力するときに宣言する(UARTのｿﾌﾄ実装は不可)	
 
 //#define	I2C_SOFT	//I2Cをｿﾌﾄ実装するときに宣言する
@@ -34,12 +34,20 @@
 #define		VOICEI_IMA	//音声IがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
 #define		VOICES_IMA	//音声SがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
 
+//#define	ISP_SPIFLASH_EN	//ISP環境でSPIﾌﾗｯｼｭを書替えるときに宣言する
+				//(自動的に､ﾃﾞﾊﾞｸﾞ情報のUART内蔵ﾓｼﾞｭｰﾙを230400bpsで使用する)
+				//(通常のｱﾌﾟﾘは実行されない)
+
 
 /*
 STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 これは根のｿｰｽｺｰﾄﾞ
 
+・ISP形態でSPIﾌﾗｯｼｭを書替える機能(ISP_SPIFLASH)に対応している｡
+
 ・ﾀｰｹﾞｯﾄはSTM32G031J6M6(内部96MHzｸﾛｯｸ)
+
+以下は電子ｵﾙｺﾞｰﾙとして動作するときの説明である｡
 
 ・複数のSW･単数のCdS･複数のCVDを実装可能｡但しﾎﾟｰﾄ割当てが可能なもの｡
 ・それぞれをｵﾙｺﾞｰﾙ演奏･ﾌﾗｯｼｭ音声再生･ﾌﾟﾛｸﾞﾗﾑ音声再生の開始･中断に充てることができる｡
@@ -91,7 +99,7 @@ STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 W25Qのﾋﾟﾝ接(標準SPIﾓｰﾄﾞ)
 1:CS(2線SPIでは10k*220pの時定数回路を介してCLKに繋ぐ)
 2:DO(2線SPI･3線SPIではDIに繋ぐ)
-3:WP(GNDに接続)
+3:WP(GNDに接続､ISPを利用する場合はVccに接続)
 4:GND
 5:DI
 6:CLK
@@ -107,7 +115,7 @@ W25Qのﾋﾟﾝ接(標準SPIﾓｰﾄﾞ)
 //ﾃﾞﾊﾞｸﾞ情報出力はｿﾌﾄ実装し､入力ﾃﾞﾊﾞｸﾞ情報入力は割当てできない
 //==============================================
 STM32G031J6M6のﾎﾟｰﾄの割当て
-1:(PB7)ﾃﾞﾊﾞｸﾞ信号出力､ﾃﾞﾊﾞｸﾞ情報出力(ｿﾌﾄ実装)
+1:(PB7)ﾃﾞﾊﾞｸﾞ信号出力､ﾃﾞﾊﾞｸﾞ情報出力/(USART1_TX)UART入力
 1:(PB8)SW0(内部ﾌﾟﾙｱｯﾌﾟ)
 1:(PB9)
 1:(PC14)
@@ -118,13 +126,14 @@ STM32G031J6M6のﾎﾟｰﾄの割当て
 4:(PA2)
 4:(PF2-NRST)
 5:(PA8)/(TIM1_CH1)ﾌﾞﾘｯｼﾞ･ﾌﾞﾚｰｷ逆相出力
-5:(PA11[PA9])/(I2C2_SCL)(外部ﾌﾟﾙｱｯﾌﾟ1.5k)/MISO/(SPI1_MISO)(SDCのDO･W25QのDOに繋ぐ､3線SPI･2線SPIのときは不使用)
+5:(PA11[PA9])ISP時のﾃﾞﾊﾞｸﾞ情報出力/(I2C2_SCL)(外部ﾌﾟﾙｱｯﾌﾟ1.5k)/
+             MISO/(SPI1_MISO)(SDCのDO･W25QのDOに繋ぐ､3線SPI･2線SPIのときは不使用)
 5:(PB0)/(ADC_IN8)CVD0
 5:(PB1)/(TIM1_CH3N)ｺﾝﾌﾟﾘ出力
 6:(PA12[PA10])/(I2C2_SDA)(外部ﾌﾟﾙｱｯﾌﾟ1.5k)/MOSI/(SPI1_MOSI)(SDCのDI･W25QのDIに繋ぐ)
 7:(PA13)SW1(内部ﾌﾟﾙｱｯﾌﾟ)､SS(SDCのCS･W25QのCSに繋ぐ､2線SPIのときは不使用)/(SWDIO)
 8:(PB5)
-8:(PB6)/(TIM1_CH3)正相出力
+8:(PB6)/(TIM1_CH3)正相出力/(USART1_TX)UART出力
 8:(PA14-BOOT0)/(SWCLK)
 8:(PA15)
 */
@@ -141,18 +150,27 @@ STM32G031J6M6のﾎﾟｰﾄの割当て
 //==============================================
 //構成情報(ｱﾌﾟﾘｹｰｼｮﾝとﾀｰｹﾞｯﾄﾃﾞﾊﾞｲｽに関わるもの)
 //==============================================
+//UARTのﾎﾟｰﾄ定義
+#define	UART_GPIO	GPIOB			//UART出力のﾎﾟｰﾄ
+#define	UART_BIT	6			//UART出力のﾋﾞｯﾄ
+#define	UART_AF		0			//UART出力のUART交代機能番号
+#define	UART_IN_GPIO	GPIOB			//UART入力のﾎﾟｰﾄ
+#define	UART_IN_BIT	7			//UART入力のﾋﾞｯﾄ
+#define	UART_IN_AF	0			//UART入力のUART交代機能番号
+
 //ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ定義
 #define	DBS_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ
 #define	DBS_BIT		7			//ﾃﾞﾊﾞｸﾞ信号のﾋﾞｯﾄ
 
 //ﾃﾞﾊﾞｸﾞ情報のﾎﾟｰﾄ定義
-#ifdef SHDBG_SOFT			//UARTをｿﾌﾄ実装するとき
+#ifdef	ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#define	SHDBG_SOFT				//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装する
+#define	DBG_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
+#define	DBG_BIT		11			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
+#define	SHDBG_SOFT				//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装する
 #define	DBG_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
 #define	DBG_BIT		7			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
-#else					//内蔵UARTを使うとき
-#define	DBG_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
-#define	DBG_BIT		6			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
-#define	DBG_AF		0			//ﾃﾞﾊﾞｸﾞ情報出力のUART交代機能番号
 #endif
 
 //PWMのﾎﾟｰﾄ定義
@@ -175,9 +193,6 @@ STM32G031J6M6のﾎﾟｰﾄの割当て
 #define	I2C_SDA_AF	6			//SDAの交代機能番号
 
 //SPIのﾎﾟｰﾄ定義
-#if defined(SHSPI2)||defined(SHSPI3)	//2線SPI又は3線SPIのとき
-#define	SPI_SOFT				//SPIはｿﾌﾄ実装になる
-#endif
 #define SPI_SCK_GPIO	GPIOA			//SCKのﾎﾟｰﾄ
 #define SPI_SCK_BIT	1			//SCKのﾋﾞｯﾄ
 #define	SPI_SCK_AF	0			//SCKの交代機能番号
@@ -445,8 +460,16 @@ static const struct VOICES_HDR voiceS_idx[]=
 //共通ｺｰﾄﾞの呼込み
 //==============================================
 #define	DEV_G03x				//ﾃﾞﾊﾞｲｽはG03x
-#define DEV_I2C2				//I2C2を使う
+#define	DEV_I2C2				//I2C2を使う
 #define	I2Cx	I2C2				//I2CﾚｼﾞｽﾀはI2C2を指す
+#define	DEV_SPI1				//SPI1を使う
 #define	SPIx	SPI1				//SPIﾚｼﾞｽﾀはSPI1を指す
+#define	DEV_UART1				//UART1を使う
+#define	UARTx	USART1				//USARTﾚｼﾞｽﾀはUSART1を指す
+//#define	UARTBPS	115200			//UARTのﾎﾞｰﾚｰﾄ(ﾃﾞﾌｫﾙﾄ値は38400bps)
 #include "../dev_G03x_8.c"			//G03x(8ﾋﾟﾝ)ﾃﾞﾊﾞｲｽｺｰﾄﾞ
+#ifdef ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#include "../apl_ISP_SPIFLASH.c"		//ISP実行ｱﾌﾟﾘｹｰｼｮﾝ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
 #include "../apl_SW.c"				//SW操作ｱﾌﾟﾘｹｰｼｮﾝ
+#endif
