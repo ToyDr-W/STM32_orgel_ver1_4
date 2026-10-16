@@ -53,12 +53,12 @@ song_idx_bgn
  ;son_mac song_ANPANMARCH,song_ANPANMARCH_DEF 
  ;son_mac song_ANPANTAISO,song_ANPANTAISO_DEF 
  ;son_mac song_AOIMENO,song_AOIMENO_DEF 
- son_mac song_ARIA,song_ARIA_DEF 
- son_mac song_AU,song_AU_DEF 
+ ;son_mac song_ARIA,song_ARIA_DEF 
+ ;son_mac song_AU,song_AU_DEF 
  ;son_mac song_AWATENBOU,song_AWATENBOU_DEF 
  ;son_mac song_AWATETOKOYA,song_AWATETOKOYA_DEF 
- son_mac song_AWAY,song_AWAY_DEF 
- son_mac song_BAMBA,song_BAMBA_DEF 
+ ;son_mac song_AWAY,song_AWAY_DEF 
+ ;son_mac song_BAMBA,song_BAMBA_DEF 
  ;son_mac song_BANANABOAT,song_BANANABOAT_DEF 
  ;son_mac song_BIRTHDAY,song_BIRTHDAY_DEF 
  ;son_mac song_BIWAKO,song_BIWAKO_DEF 
@@ -88,7 +88,7 @@ song_idx_bgn
  son_mac song_ELECTRICAL,song_ELECTRICAL_DEF 
  ;son_mac song_FIRE,song_FIRE_DEF 
  ;son_mac song_FURUDOKEI,song_FURUDOKEI_DEF 
- son_mac song_FURUSATO,song_FURUSATO_DEF 
+ ;son_mac song_FURUSATO,song_FURUSATO_DEF 
  ;son_mac song_FURUSATO4,song_FURUSATO4_DEF 
  ;son_mac song_FUYUGESHIKI,song_FUYUGESHIKI_DEF 
  son_mac song_FUYUNOSEIZA3,song_FUYUNOSEIZA3_DEF 
@@ -99,9 +99,9 @@ song_idx_bgn
  ;son_mac song_GOLONDRINA,song_GOLONDRINA_DEF 
  ;son_mac song_GONDOLA,song_GONDOLA_DEF 
  ;son_mac song_HAJIMETECHU3,song_HAJIMETECHU3_DEF 
- son_mac song_HALELUYA,song_HALELUYA_DEF 
- son_mac song_HAMABE,song_HAMABE_DEF 
- son_mac song_HANA,song_HANA_DEF 
+ ;son_mac song_HALELUYA,song_HALELUYA_DEF 
+ ;son_mac song_HAMABE,song_HAMABE_DEF 
+ ;son_mac song_HANA,song_HANA_DEF 
  ;son_mac song_HARUKAZE3,song_HARUKAZE3_DEF 
  ;son_mac song_HARUKITA,song_HARUKITA_DEF 
  ;son_mac song_HARUKOI,song_HARUKOI_DEF 
@@ -120,7 +120,7 @@ song_idx_bgn
  ;son_mac song_INUOMAWARI,song_INUOMAWARI_DEF 
  ;son_mac song_ISSYUUKAN,song_ISSYUUKAN_DEF 
  ;son_mac song_ITOMAKI,song_ITOMAKI_DEF 
- ;son_mac song_JAMAICA,song_JAMAICA_DEF 
+ son_mac song_JAMAICA,song_JAMAICA_DEF 
  ;son_mac song_JINGLE,song_JINGLE_DEF 
  ;son_mac song_JUPITER,song_JUPITER_DEF 
  ;son_mac song_KAERUGASSHOU,song_KAERUGASSHOU_DEF 
@@ -138,12 +138,12 @@ song_idx_bgn
  ;son_mac song_KODOMOTO,song_KODOMOTO_DEF 
  ;son_mac song_KOHAN,song_KOHAN_DEF 
  ;son_mac song_KOINOBORI3,song_KOINOBORI3_DEF 
- son_mac song_KOKYONOSORA,song_KOKYONOSORA_DEF 
+ ;son_mac song_KOKYONOSORA,song_KOKYONOSORA_DEF 
  ;son_mac song_KUROIHITOMI,song_KUROIHITOMI_DEF 
  ;son_mac song_KUTSUNARU,song_KUTSUNARU_DEF 
  ;son_mac song_KYORO,song_KYORO_DEF 
  ;son_mac song_MACHIBOUKE,song_MACHIBOUKE_DEF 
- son_mac song_MAKIBAWA,song_MAKIBAWA_DEF 
+ ;son_mac song_MAKIBAWA,song_MAKIBAWA_DEF 
  ;son_mac song_MAMASOBA,song_MAMASOBA_DEF 
  ;son_mac song_MATSUBARA,song_MATSUBARA_DEF 
  ;son_mac song_MERIHITUJI,song_MERIHITUJI_DEF 
@@ -158,12 +158,12 @@ song_idx_bgn
  ;son_mac song_NATSUKINU,song_NATSUKINU_DEF 
  son_mac song_NEKOHUN,song_NEKOHUN_DEF 
  ;son_mac song_NEMURE,song_NEMURE_DEF 
- son_mac song_NEMURE2,song_NEMURE2_DEF 
+ ;son_mac song_NEMURE2,song_NEMURE2_DEF 
  ;son_mac song_NOBARA,song_NOBARA_DEF 
  ;son_mac song_OBENTOBAKO,song_OBENTOBAKO_DEF 
  ;son_mac song_OBORO,song_OBORO_DEF 
  ;son_mac song_ODOPON,song_ODOPON_DEF 
- son_mac song_OKAASAN,song_OKAASAN_DEF 
+ ;son_mac song_OKAASAN,song_OKAASAN_DEF 
  ;son_mac song_ONCEINROYAL,song_ONCEINROYAL_DEF 
  ;son_mac song_ONIPANTU,song_ONIPANTU_DEF 
  ;son_mac song_ONMAHA,song_ONMAHA_DEF 
@@ -182,7 +182,7 @@ song_idx_bgn
  ;son_mac song_RYOSHU,song_RYOSHU_DEF 
  ;son_mac song_SAINTS,song_SAINTS_DEF 
  ;son_mac song_SAKURA2,song_SAKURA2_DEF 
- son_mac song_SANPO,song_SANPO_DEF 
+ ;son_mac song_SANPO,song_SANPO_DEF 
  ;son_mac song_SANSAN,song_SANSAN_DEF 
  ;son_mac song_SANTAMATI,song_SANTAMATI_DEF 
  ;son_mac song_SAYAKANI,song_SAYAKANI_DEF 
@@ -199,9 +199,9 @@ song_idx_bgn
  ;son_mac song_SOUSYUNFU,song_SOUSYUNFU_DEF 
  ;son_mac song_SWANEE3,song_SWANEE3_DEF 
  ;son_mac song_SYABONDAMA,song_SYABONDAMA_DEF 
- son_mac song_TAKEDA,song_TAKEDA_DEF 
+ ;son_mac song_TAKEDA,song_TAKEDA_DEF 
  ;son_mac song_TAKIBI,song_TAKIBI_DEF 
- son_mac song_TANABATA,song_TANABATA_DEF 
+ ;son_mac song_TANABATA,song_TANABATA_DEF 
  ;son_mac song_TEWOTATA,song_TEWOTATA_DEF 
  ;son_mac song_THOMAS,song_THOMAS_DEF 
  ;son_mac song_THOMAS2,song_THOMAS2_DEF 
@@ -212,13 +212,13 @@ song_idx_bgn
  ;son_mac song_TRISTESSE2,song_TRISTESSE2_DEF 
  ;son_mac song_TROIKA,song_TROIKA_DEF 
  ;son_mac song_UMI,song_UMI_DEF 
- son_mac song_VRENELI,song_VRENELI_DEF 
+ ;son_mac song_VRENELI,song_VRENELI_DEF 
  ;son_mac song_WEWISH,song_WEWISH_DEF 
  ;son_mac song_WINTERWONDER,song_WINTERWONDER_DEF 
  ;son_mac song_YAMAONGAKUKA,song_YAMAONGAKUKA_DEF 
  ;son_mac song_YOROKOBI4,song_YOROKOBI4_DEF 
  ;son_mac song_YUKI,song_YUKI_DEF 
- son_mac song_YURIKAGO,song_YURIKAGO_DEF 
+ ;son_mac song_YURIKAGO,song_YURIKAGO_DEF 
  ;son_mac song_YURIKAGO3,song_YURIKAGO3_DEF 
  ;son_mac song_YUUKI100,song_YUUKI100_DEF 
  ;son_mac song_YUUKIRINRIN,song_YUUKIRINRIN_DEF 
