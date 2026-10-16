@@ -18,6 +18,8 @@
 #define VOICES1_VOL 100 
 #define VOICES2_VOL 100 
 #define ORGEL_VOL 100 
+#define KB0_VOL 100 
+#define KB1_VOL 100 
 #define VOICE_N 1 
 #define VOICE_I 0 
 #define VOICE_C 0 
