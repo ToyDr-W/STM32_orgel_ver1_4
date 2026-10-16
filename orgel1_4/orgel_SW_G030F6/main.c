@@ -34,12 +34,20 @@
 #define		VOICEI_IMA	//音声IがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
 #define		VOICES_IMA	//音声SがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
 
+//#define	ISP_SPIFLASH_EN	//ISP環境でSPIﾌﾗｯｼｭを書替えるときに宣言する
+				//(自動的に､ﾃﾞﾊﾞｸﾞ情報のUART内蔵ﾓｼﾞｭｰﾙを230400bpsで使用する)
+				//(通常のｱﾌﾟﾘは実行されない)
+
 
 /*
 STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 これは根のｿｰｽｺｰﾄﾞ
 
+・ISP形態でSPIﾌﾗｯｼｭを書替える機能(ISP_SPIFLASH)に対応している｡
+
 ・ﾀｰｹﾞｯﾄはSTM32G030F6P6(内部96MHzｸﾛｯｸ)
+
+以下は電子ｵﾙｺﾞｰﾙとして動作するときの説明である｡
 
 ・複数のSW･単数のCdS･複数のCVDを実装可能｡但しﾎﾟｰﾄ割当てが可能なもの｡
 ・それぞれをｵﾙｺﾞｰﾙ演奏･ﾌﾗｯｼｭ音声再生･ﾌﾟﾛｸﾞﾗﾑ音声再生の開始･中断に充てることができる｡
@@ -91,7 +99,7 @@ STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 W25Qのﾋﾟﾝ接(標準SPIﾓｰﾄﾞ)
 1:CS(2線SPIでは10k*220pの時定数回路を介してCLKに繋ぐ)
 2:DO(2線SPI･3線SPIではDIに繋ぐ)
-3:WP(GNDに接続)
+3:WP(GNDに接続､ISPを利用する場合はVccに接続)
 4:GND
 5:DI
 6:CLK
@@ -104,7 +112,7 @@ W25Qのﾋﾟﾝ接(標準SPIﾓｰﾄﾞ)
 //==============================================
 STM32G030F6P6のﾎﾟｰﾄの割当て
 1:(PB8)SC/I2C1_SCL(外部ﾌﾟﾙｱｯﾌﾟ1.5k)
-1:(PB7)
+1:(PB7)ISP時のﾃﾞﾊﾞｸﾞ情報出力
 2:(PB9)SDA/I2C1_SDA(外部ﾌﾟﾙｱｯﾌﾟ1.5k)
 2:(PC14)
 3:(PC15)SW0
@@ -114,7 +122,7 @@ STM32G030F6P6のﾎﾟｰﾄの割当て
 7:(PA0)BOOT0代替/(ADC_IN0)CdS
 8:(PA1)SCK/(SPI1_SCK)(SDCのCLK･W25QのCLKに繋ぐ)
 9:(PA2)MOSI/(SPI1_MOSI)(SDCのDI･W25QのDIに繋ぐ)
-10:(PA3)/(USART2_RX)ﾃﾞﾊﾞｸﾞ情報入力
+10:(PA3)/(USART2_RX)ﾃﾞﾊﾞｸﾞ情報入力･UART入力
 11:(PA4)SW4/(ADC_IN4)CVD0
 12:(PA5)/ﾃﾞﾊﾞｸﾞ信号出力
 13:(PA6)MISO/(SPI1_MISO)(SDCのDO･W25QのDOに繋ぐ､3線SPI･2線SPIのときは不使用)
@@ -126,7 +134,7 @@ STM32G030F6P6のﾎﾟｰﾄの割当て
 16:(PA11[PA9])/(TIM1_CH4)ﾌﾞﾘｯｼﾞ･ﾌﾞﾚｰｷ逆相出力
 17:(PA12[PA10])SS(SDCのCS･W25QのCSに繋ぐ､2線SPIのときは不使用)
 18:(PA13)SW2/(ADC_IN17)CVD2/(SWDIO)
-19:(PA14-BOOT0)ﾃﾞﾊﾞｸﾞ情報出力/(USART2_TX)ﾃﾞﾊﾞｸﾞ情報出力/(SWCLK)
+19:(PA14-BOOT0)ﾃﾞﾊﾞｸﾞ情報出力/(USART2_TX)ﾃﾞﾊﾞｸﾞ情報出力･UART出力/(SWCLK)
 19:(PA15)
 20:(PB3)SW1
 20:(PB4)
@@ -146,17 +154,31 @@ STM32G030F6P6のﾎﾟｰﾄの割当て
 //==============================================
 //構成情報(ｱﾌﾟﾘｹｰｼｮﾝとﾀｰｹﾞｯﾄﾃﾞﾊﾞｲｽに関わるもの)
 //==============================================
+//UARTのﾎﾟｰﾄ定義
+#define	UART_GPIO	GPIOA			//UART出力のﾎﾟｰﾄ
+#define	UART_BIT	14			//UART出力のﾋﾞｯﾄ
+#define	UART_AF		1			//UART出力のUART交代機能番号
+#define	UART_IN_GPIO	GPIOA			//UART入力のﾎﾟｰﾄ
+#define	UART_IN_BIT	3			//UART入力のﾋﾞｯﾄ
+#define	UART_IN_AF	1			//UART入力のUART交代機能番号
+
 //ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ定義
 #define	DBS_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ信号出力のﾎﾟｰﾄ
 #define	DBS_BIT		5			//ﾃﾞﾊﾞｸﾞ信号出力のﾋﾞｯﾄ
 
 //ﾃﾞﾊﾞｸﾞ情報のﾎﾟｰﾄ定義
+#ifdef	ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#define	SHDBG_SOFT				//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装する
 #define	DBG_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
-#define	DBG_BIT		6			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
-#define	DBG_AF		0			//ﾃﾞﾊﾞｸﾞ情報出力のUART交代機能番号
-#define	DBG_IN_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ情報入力のﾎﾟｰﾄ
-#define	DBG_IN_BIT	7			//ﾃﾞﾊﾞｸﾞ情報入力のﾋﾞｯﾄ
-#define	DBG_IN_AF	0			//ﾃﾞﾊﾞｸﾞ情報入力のUART交代機能番号
+#define	DBG_BIT		7			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
+#define	DBG_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
+#define	DBG_BIT		14			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
+#define	DBG_AF		1			//ﾃﾞﾊﾞｸﾞ情報出力のUART_TX交代機能番号
+#define	DBG_IN_GPIO	GPIOA			//ﾃﾞﾊﾞｸﾞ情報入力のﾎﾟｰﾄ
+#define	DBG_IN_BIT	3			//ﾃﾞﾊﾞｸﾞ情報入力のﾋﾞｯﾄ
+#define	DBG_IN_AF	1			//ﾃﾞﾊﾞｸﾞ情報入力のUART_RX交代機能番号
+#endif
 
 //PWMのﾎﾟｰﾄ定義
 #define	PWM_F_GPIO	GPIOA			//PWM正相のﾎﾟｰﾄ
@@ -178,9 +200,6 @@ STM32G030F6P6のﾎﾟｰﾄの割当て
 #define	I2C_SDA_AF	6			//SDAの交代機能番号
 
 //SPIのﾎﾟｰﾄ定義
-#if defined(SHSPI2)||defined(SHSPI3)	//2線SPI又は3線SPIのとき
-#define	SPI_SOFT				//SPIはｿﾌﾄ実装になる
-#endif
 #define SPI_SCK_GPIO	GPIOA			//SCKのﾎﾟｰﾄ
 #define SPI_SCK_BIT	1			//SCKのﾋﾞｯﾄ
 #define	SPI_SCK_AF	0			//SCKの交代機能番号
@@ -188,7 +207,7 @@ STM32G030F6P6のﾎﾟｰﾄの割当て
 #define SPI_MOSI_BIT	2			//MOSIのﾋﾞｯﾄ
 #define	SPI_MOSI_AF	0			//MOSIの交代機能番号
 #ifdef SHSPI2				//2線SPIのとき
-#define	SPI_SS_TIME	5			//SSﾈｹﾞｰﾄ待ち時間[us]
+#define	SPI_SS_TIME	15			//SSﾈｹﾞｰﾄ待ち時間[us]
 #define SPI_SS_GPIO	SPI_SCK_GPIO		//SSのﾎﾟｰﾄ
 #define SPI_SS_BIT	SPI_SCK_BIT		//SSのﾋﾞｯﾄ
 #else					//3線SPIまたは4線SPIのとき
@@ -448,8 +467,16 @@ static const struct VOICES_HDR voiceS_idx[]=
 //共通ｺｰﾄﾞの呼込み
 //==============================================
 #define	DEV_G03x				//ﾃﾞﾊﾞｲｽはG03x
-#define DEV_I2C1				//I2C1を使う
+#define	DEV_I2C1				//I2C1を使う
 #define	I2Cx	I2C1				//I2CﾚｼﾞｽﾀはI2C1を指す
+#define	DEV_SPI1				//SPI1を使う
 #define	SPIx	SPI1				//SPIﾚｼﾞｽﾀはSPI1を指す
+#define	DEV_UART2				//UART2を使う
+#define	UARTx	USART2				//USARTﾚｼﾞｽﾀはUSART2を指す
+//#define	UARTBPS	115200			//UARTのﾎﾞｰﾚｰﾄ(ﾃﾞﾌｫﾙﾄ値は38400bps)
 #include "../dev_G03x.c"			//G03xﾃﾞﾊﾞｲｽｺｰﾄﾞ
+#ifdef ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#include "../apl_ISP_SPIFLASH.c"		//ISP実行ｱﾌﾟﾘｹｰｼｮﾝ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
 #include "../apl_SW.c"				//SW操作ｱﾌﾟﾘｹｰｼｮﾝ
+#endif

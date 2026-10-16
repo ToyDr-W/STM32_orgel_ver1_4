@@ -1,5 +1,5 @@
 //#define	SHDBS		//ﾃﾞﾊﾞｸﾞ信号を出力するときに宣言する
-//#define	SHDBG		//ﾃﾞﾊﾞｸﾞ情報を出力するときに宣言する
+#define	SHDBG		//ﾃﾞﾊﾞｸﾞ情報を出力するときに宣言する
 //#define	SHBPS	115200	//ﾃﾞﾊﾞｸﾞ情報のﾎﾞｰﾚｰﾄを宣言する(ﾃﾞﾌｫﾙﾄ値は38400bps)
 //#define	SHDBG_SOFT	//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装するときに宣言する		
 //#define	SHDBG_IN	//ﾃﾞﾊﾞｸﾞ情報を入力するときに宣言する(UARTのｿﾌﾄ実装は不可)	
@@ -10,11 +10,11 @@
 //#define	SHSPI2		//2線SPIのときに宣言する
 //#define	SHSPI3		//3線SPIのときに宣言する
 #define		SLEEP_EN	//Sleep機能を実装するときに宣言する
-//#define	KYOKU_AUTO	//ｵﾙｺﾞｰﾙ演奏を自動開始するときに宣言する
-//#define	ONSEIN_AUTO	//音声N(ch0)再生を自動開始するときに宣言する
-//#define	ONSEII_AUTO	//音声I再生を自動開始するときに宣言する
-//#define	ONSEIC_AUTO	//音声C再生を自動開始するときに宣言する
-//#define	ONSEIS_AUTO	//音声S(ch0)再生を自動開始するときに宣言する
+#define	KYOKU_AUTO	//ｵﾙｺﾞｰﾙ演奏を自動開始するときに宣言する
+#define	ONSEIN_AUTO	//音声N(ch0)再生を自動開始するときに宣言する
+#define	ONSEII_AUTO	//音声I再生を自動開始するときに宣言する
+#define	ONSEIC_AUTO	//音声C再生を自動開始するときに宣言する
+#define	ONSEIS_AUTO	//音声S(ch0)再生を自動開始するときに宣言する
 //#define	RAND_CHSEL	0x00000040	//ﾗﾝﾀﾞﾏｲｽﾞの種にするCHSEL(PA0:ADC_IN1)
 //#define	KYOKU_RAND	//曲番号をﾗﾝﾀﾞﾏｲｽﾞするときに宣言する
 //#define	ONSEIN_RAND	//音声N番号をﾗﾝﾀﾞﾏｲｽﾞするときに宣言する
@@ -34,12 +34,20 @@
 #define		VOICEI_IMA	//音声IがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
 #define		VOICES_IMA	//音声SがIMA_ADPCMｴﾝｺｰﾄﾞのときに宣言する
 
+//#define	ISP_SPIFLASH_EN	//ISP環境でSPIﾌﾗｯｼｭを書替えるときに宣言する
+				//(自動的に､ﾃﾞﾊﾞｸﾞ情報のUART内蔵ﾓｼﾞｭｰﾙを230400bpsで使用する)
+				//(通常のｱﾌﾟﾘは実行されない)
+
 
 /*
 STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 これは根のｿｰｽｺｰﾄﾞ
 
+・ISP形態でSPIﾌﾗｯｼｭを書替える機能(ISP_SPIFLASH)に対応している｡
+
 ・ﾀｰｹﾞｯﾄはSTM32F030F4P6(内部64MHzｸﾛｯｸ)
+
+以下は電子ｵﾙｺﾞｰﾙとして動作するときの説明である｡
 
 ・複数のSW･単数のCdS･複数のCVDを実装可能｡但しﾎﾟｰﾄ割当てが可能なもの｡
 ・それぞれをｵﾙｺﾞｰﾙ演奏･ﾌﾗｯｼｭ音声再生･ﾌﾟﾛｸﾞﾗﾑ音声再生の開始･中断に充てることができる｡
@@ -91,7 +99,7 @@ STM32電子ｵﾙｺﾞｰﾙ演奏+音声再生ver1_4
 W25Qのﾋﾟﾝ接(標準SPIﾓｰﾄﾞ)
 1:CS(2線SPIでは10k*220pの時定数回路を介してCLKに繋ぐ)
 2:DO(2線SPI･3線SPIではDIに繋ぐ)
-3:WP(GNDに接続)
+3:WP(GNDに接続､ISPを利用する場合はVccに接続)
 4:GND
 5:DI
 6:CLK
@@ -133,7 +141,7 @@ STM32F302R8T6のﾎﾟｰﾄの割当て
 26:(PB0)
 27:(PB1)
 28:(PB2)
-29:(PB10)ﾃﾞﾊﾞｸﾞ信号出力
+29:(PB10)
 30:(PB11)(ADC1_IN14)CdS
 31:VSS
 32:VDD
@@ -159,14 +167,14 @@ STM32F302R8T6のﾎﾟｰﾄの割当て
 52:(PC11)SW5
 53:(PC12)SW6
 54:(PD2)SW7
-55:(PB3)ﾃﾞﾊﾞｸﾞ情報出力/(USART2_TX)ﾃﾞﾊﾞｸﾞ情報出力
-56:(PB4)/(USART2_RX)ﾃﾞﾊﾞｸﾞ情報入力
+55:(PB3)ﾃﾞﾊﾞｸﾞ情報出力/(USART2_TX)ﾃﾞﾊﾞｸﾞ情報出力･UART出力
+56:(PB4)/(USART2_RX)ﾃﾞﾊﾞｸﾞ情報入力･UART入力
 57:(PB5)
 58:(PB6)
 59:(PB7)
 60:BOOT0
-61:(PB8)
-62:(PB9)
+61:(PB8)ﾃﾞﾊﾞｸﾞ信号
+62:(PB9)ISP時のﾃﾞﾊﾞｸﾞ情報出力
 63:VSS
 64:VDD
 */
@@ -183,17 +191,31 @@ STM32F302R8T6のﾎﾟｰﾄの割当て
 //==============================================
 //構成情報(ｱﾌﾟﾘｹｰｼｮﾝとﾀｰｹﾞｯﾄﾃﾞﾊﾞｲｽに関わるもの)
 //==============================================
+//UARTのﾎﾟｰﾄ定義
+#define	UART_GPIO	GPIOB			//UART出力のﾎﾟｰﾄ
+#define	UART_BIT	3			//UART出力のﾋﾞｯﾄ
+#define	UART_AF		7			//UART出力のUART交代機能番号
+#define	UART_IN_GPIO	GPIOB			//UART入力のﾎﾟｰﾄ
+#define	UART_IN_BIT	4			//UART入力のﾋﾞｯﾄ
+#define	UART_IN_AF	7			//UART入力のUART交代機能番号
+
 //ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ定義
 #define	DBS_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ信号のﾎﾟｰﾄ
-#define	DBS_BIT		10			//ﾃﾞﾊﾞｸﾞ信号のﾋﾞｯﾄ
+#define	DBS_BIT		8			//ﾃﾞﾊﾞｸﾞ信号のﾋﾞｯﾄ
 
 //ﾃﾞﾊﾞｸﾞ情報のﾎﾟｰﾄ定義
+#ifdef	ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#define	SHDBG_SOFT				//ﾃﾞﾊﾞｸﾞ情報のUARTをｿﾌﾄ実装する
 #define	DBG_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ情報出力のﾎﾟｰﾄ
-#define	DBG_BIT		3			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
-#define	DBG_AF		7			//ﾃﾞﾊﾞｸﾞ情報出力のUART交代機能番号
-#define	DBG_IN_GPIO	GPIOB			//ﾃﾞﾊﾞｸﾞ情報入力のﾎﾟｰﾄ
-#define	DBG_IN_BIT	4			//ﾃﾞﾊﾞｸﾞ情報入力のﾋﾞｯﾄ
-#define	DBG_IN_AF	7			//ﾃﾞﾊﾞｸﾞ情報入力のUART交代機能番号
+#define	DBG_BIT		9			//ﾃﾞﾊﾞｸﾞ情報出力のﾋﾞｯﾄ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
+#define	DBG_GPIO	GPIOB			//UART出力のﾎﾟｰﾄ
+#define	DBG_BIT	3			//UART出力のﾋﾞｯﾄ
+#define	DBG_AF		7			//UART出力のUART交代機能番号
+#define	DBG_IN_GPIO	GPIOB			//UART入力のﾎﾟｰﾄ
+#define	DBG_IN_BIT	4			//UART入力のﾋﾞｯﾄ
+#define	DBG_IN_AF	7			//UART入力のUART交代機能番号
+#endif
 
 //PWMのﾎﾟｰﾄ定義
 #define	PWM_F_GPIO	GPIOC			//PWM正相のﾎﾟｰﾄ
@@ -215,9 +237,6 @@ STM32F302R8T6のﾎﾟｰﾄの割当て
 #define	I2C_SDA_AF	4			//SDAの交代機能番号
 
 //SPIのﾎﾟｰﾄ定義
-#if defined(SHSPI2)||defined(SHSPI3)	//2線SPI又は3線SPIのとき
-#define	SPI_SOFT				//SPIはｿﾌﾄ実装になる
-#endif
 #define SPI_SCK_GPIO	GPIOB			//SCKのﾎﾟｰﾄ
 #define SPI_SCK_BIT	13			//SCKのﾋﾞｯﾄ
 #define	SPI_SCK_AF	5			//SCKの交代機能番号
@@ -531,7 +550,16 @@ static const struct VOICES_HDR voiceS_idx[]=
 //共通ｺｰﾄﾞの呼込み
 //==============================================
 #define	DEV_F302				//ﾃﾞﾊﾞｲｽはF302
-#define	I2Cx	I2C2				//I2C2を使う
-#define	SPIx	SPI2				//SPI1を使う
+#define	DEV_I2C2				//I2C2を使う
+#define	I2Cx	I2C2				//I2CﾚｼﾞｽﾀはI2C2を指す
+#define	DEV_SPI2				//SPI2を使う
+#define	SPIx	SPI2				//SPIﾚｼﾞｽﾀはSPI2を指す
+#define	DEV_UART2				//UART2を使う
+#define	UARTx	USART2				//USARTﾚｼﾞｽﾀはUSART1を指す
+//#define	UARTBPS	115200			//UARTのﾎﾞｰﾚｰﾄ(ﾃﾞﾌｫﾙﾄ値は38400bps)
 #include "../dev_F302.c"			//F302ﾃﾞﾊﾞｲｽｺｰﾄﾞ
+#ifdef ISP_SPIFLASH_EN			//ISP環境でSPIﾌﾗｯｼｭを書替えるとき
+#include "../apl_ISP_SPIFLASH.c"		//ISP実行ｱﾌﾟﾘｹｰｼｮﾝ
+#else					//電子ｵﾙｺﾞｰﾙ動作のとき
 #include "../apl_SW.c"				//SW操作ｱﾌﾟﾘｹｰｼｮﾝ
+#endif

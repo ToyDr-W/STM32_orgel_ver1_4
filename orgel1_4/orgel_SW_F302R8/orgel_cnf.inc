@@ -18,10 +18,12 @@ VOICES0_VOL equ 100
 VOICES1_VOL equ 100 
 VOICES2_VOL equ 100 
 ORGEL_VOL equ 100 
+KB0_VOL equ 100 
+KB1_VOL equ 100 
 VOICE_N equ 1 
-VOICE_I equ 1 
+VOICE_I equ 0 
 VOICE_C equ 0 
-VOICE_S equ 1 
+VOICE_S equ 0 
 PART_N equ 4 
 KB_N equ 0 
  end 
