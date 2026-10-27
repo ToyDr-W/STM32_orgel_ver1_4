@@ -1,6 +1,6 @@
-# STM32_orgel_ver1_4
+## STM32_orgel_ver1_4
 
-# [ARCHIVE / READ-ONLY] STM32 Electronic Music Box Project Backup
+# 📦 [ARCHIVE / READ-ONLY] STM32 Electronic Music Box Project Backup
 
 **This repository is a read-only archive for backup purposes. It is NOT an active workspace for collaborative development.**
 
@@ -10,10 +10,29 @@
 
 ---
 
-### 本リポジトリについて（日本語）
+### 📦 本リポジトリについて（日本語）
 
 このリポジトリは、開発者ご本家の了解を得て、Google ドライブで公開されているオリジナル版のファイルをそのまま保存した**バックアップ（展示スペース）**です。
 約1400余りのファイルからなるプロジェクト一式を、階層構造を100%維持した状態で格納しています。
+
+
+> [!NOTE]
+> ### 📥 最新データのダウンロードについて（v1.2.0正式リリースまで）
+> 開発元（名張市つつじが丘おもちゃ病院様）の公開ダウンロードファイルは随時更新されます。次のアップデートがあったときは、本リポジトリへの反映は しばらく様子を見て、安定後に **v1.2.0（安定版）** としてリリース予定です。
+> 
+> それまでの間、最新の回路図およびプログラム一式をダウンロードするには、
+> [ここをクリックしてください。 ⬇️](https://github.com/ToyDr-W/STM32_orgel_ver1_4/archive/refs/heads/main.zip)
+> ダウンロード（79.4 MBのZIPファイル）が直ちに開始されます。
+>
+> ---
+>
+> ### 📥 Downloading the Latest Data (Prior to v1.2.0 Official Release)
+> The file made available for download by the developer (Nabari City Tsutsujigaoka Toy Hospital) is updated periodically. When a new update is released, it will not be immediately incorporated into this repository; instead, we will monitor it for a while, and once it has proven stable, we plan to release it as **v1.2.0 (stable version)**.
+> 
+> In the meantime, [please click here to download ⬇️](https://github.com/ToyDr-W/STM32_orgel_ver1_4/archive/refs/heads/main.zip) the latest circuit diagrams and the complete set of programs. The download (79.4 MB ZIP file) will begin immediately.
+> 
+
+---
 
 ### 🔗 開発者ご本家・オリジナルリソース (Original Resources)
 
